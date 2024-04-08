@@ -2,9 +2,9 @@
 <html>
 <body>
 
-<?php
-echo "Hello World";
-?>
+<title>
+The One Piece Spoiler Database
+</title>
 
 </body>
 </html>
