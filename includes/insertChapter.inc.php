@@ -21,14 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$info_cache_stmt->execute([$publish_date]);
 		
 		$info_cache_id = $pdo->lastInsertId("id");
-
+		
 		try {
-
 		$chapter_query = "INSERT INTO _chapter (number, title, _info_cache_id, _cover_story_id, _volume_number, _story_arc_id) VALUES (?, ?, ?, ?, ?, ?);";
 		$chapter_stmt = $pdo->prepare($chapter_query);
-		$chapter_stmt->execute([$chapter_number, $chapter_title, $info_cache_id, $_cover_story_id, $volume_number, $story_arc_id]);
-
+		$chapter_stmt->execute([$chapter_number, $chapter_title, $info_cache_id, $cover_story_id, $volume_number, $story_arc_id]);
 		} catch (PDOException $e) {
+	
+			echo "Query Falied: " . $e->getMessage() . "\n";
 
 			try {
 			
@@ -37,15 +37,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$delete_stmt = $pdo->prepare($delete_query);
 			$delete_stmt->execute([$info_cache_id]);
 
-			$increment_query = "ALTER TABLE _info_cache AUTOINCREMENT = ?;";
-			$increment_stmt = $pdo->prepare($delete_query);
-			$delete_stmt->execute([$info_cache_id - 1]);
+			echo "Test 1 : " . $info_cache_id . " ";
 
-			die("Query failed: " . $e->getMessage());
+			$reset_index_query = "ALTER TABLE _info_cache AUTO_INCREMENT = ?;";
+			$reset_index_stmt = $pdo->prepare($reset_index_query);
+			$reset_index_stmt->execute([$info_cache_id]);
+
+			echo"Test 2";
+			die("Killed");
 
 			} catch (PDOException $e) {
 	
-			die("Query failed: " . $e->getMessage());
+			die("Sub Query Failed: " . $e->getMessage());
 			
 			}
 		}
