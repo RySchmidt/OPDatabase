@@ -1,4 +1,5 @@
 <?php
+
 $dsn = "mysql:host=localhost;dbname=one_piece_unspoiled";
 $dbusername = "root";
 $dbpassword = "";

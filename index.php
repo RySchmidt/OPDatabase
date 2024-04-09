@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html>
-<body>
 
+<head>
 <title>
-The One Piece Spoiler Database
+One Piece Unspoiled
 </title>
+</head>
+
+<body>
+<h1>
+One Piece Unspoiled
+</h1>
+<a href="dataEntry.php">
+Data Entry
+</a>
+
 
 </body>
 </html>
