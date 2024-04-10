@@ -1,5 +1,5 @@
 Resources
-	W3School's PHP and SQL courses
+	W3School's HTML, PHP, SQL courses
 	Dani Krossing's PHP Course for Beginers
 	Stack Overflow
 	Geeks for Geeks

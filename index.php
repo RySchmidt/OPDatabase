@@ -11,10 +11,8 @@ One Piece Unspoiled
 <h1>
 One Piece Unspoiled
 </h1>
-<a href="dataEntry.php">
-Data Entry
-</a>
-
+<a href="/OPDatabase/pages/chapter.php"> Chapter </a>
+<br>
 
 </body>
 </html>
