@@ -1,0 +1,10 @@
+Resources
+	W3School's PHP and SQL courses
+	Dani Krossing's PHP Course for Beginers
+	Stack Overflow
+	Geeks for Geeks
+	PHP Manual
+	MySQL Manual
+
+Struggles
+	The Validation Method: I spent an entire day attempting to create a method to validate my SQL queries only to relise that you cannot input table or column names a parameters.

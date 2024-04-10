@@ -1,61 +1,132 @@
 <?php
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	
-	//Required Data
-	$chapter_number = $_POST["chapter_number"];
-	$chapter_title = $_POST["chapter_title"];
-	$publish_date = $_POST["publish_date"];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {	
 
-	//Optional Data
+	$chapter_number = $_POST["chapter_number"];
+	//UNIQUE
+	//NOT NULL
+
+	$chapter_title = $_POST["chapter_title"];
+	//UNIQUE
+	//NOT NULL
+
 	$cover_story_id = $_POST["cover_story_id"];
+	//UNIQUE
+
+	$publish_date = $_POST["chapter_publish_date"];
+	//NOT NULL
+
+	//NO CONSTRAINTS
 	$volume_number = $_POST["volume_number"];
 	$story_arc_id = $_POST["story_arc_id"];
 
 	try {
+
 		require_once "dbh.inc.php";
 
-		//Data Insertion
-		$info_cache_query = "INSERT INTO _info_cache (release_date) VALUES (?);";	
-		$info_cache_stmt = $pdo->prepare($info_cache_query);
-		$info_cache_stmt->execute([$publish_date]);
-		
-		$info_cache_id = $pdo->lastInsertId("id");
-		
-		try {
-		$chapter_query = "INSERT INTO _chapter (number, title, _info_cache_id, _cover_story_id, _volume_number, _story_arc_id) VALUES (?, ?, ?, ?, ?, ?);";
-		$chapter_stmt = $pdo->prepare($chapter_query);
-		$chapter_stmt->execute([$chapter_number, $chapter_title, $info_cache_id, $cover_story_id, $volume_number, $story_arc_id]);
-		} catch (PDOException $e) {
-	
-			echo "Query Falied: " . $e->getMessage() . "\n";
+		//-------------------------------------------------------------------------------------------------
+		//DATA VALIDATION
 
-			try {
-			
-			//Delete the unused info_cache truple
-			$delete_query = "DELETE FROM _info_cache WHERE _info_cache.id = ?;";
-			$delete_stmt = $pdo->prepare($delete_query);
-			$delete_stmt->execute([$info_cache_id]);
+		$throw_exception = false;
+		$exception_message = "";
 
-			echo "Test 1 : " . $info_cache_id . " ";
+		//Primary Key Check
+		//Does not need to be checked because info cache will always make a new id.
 
-			$reset_index_query = "ALTER TABLE _info_cache AUTO_INCREMENT = ?;";
-			$reset_index_stmt = $pdo->prepare($reset_index_query);
-			$reset_index_stmt->execute([$info_cache_id]);
+		//Unique Check
+		$select_query = "SELECT *
+			FROM _chapter
+			WHERE number = :chapter_number OR title = :chapter_title OR _cover_story_id = :cover_story_id;";
 
-			echo"Test 2";
-			die("Killed");
+		$select_stmt = $pdo->prepare($select_query);
+		$select_stmt->bindParam(":chapter_number", $chapter_number);
+		$select_stmt->bindParam(":chapter_title", $chapter_title);
+		$select_stmt->bindParam(":cover_story_id", $cover_story_id);
 
-			} catch (PDOException $e) {
-	
-			die("Sub Query Failed: " . $e->getMessage());
-			
+		$select_stmt->execute();
+		$select_results = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if (!empty($select_results)) {
+			$throw_exception = true;
+			for ($i = 0; $i < sizeof($select_results); $i++) {
+				if ($chapter_number != NULL && $select_results[$i]["number"] == $chapter_number) {
+					$exception_message = $exception_message . "chapter.number " . $chapter_number . " already exists in the database and must be unique.<br>";
+				}
+				if ($chapter_title != NULL && $select_results[$i]["title"] == $chapter_title) {
+					$exception_message = $exception_message . "chapter.title " . $chapter_title . " already exists in the database and must be unique.<br>";
+				}
+				if ($cover_story_id != NULL && $select_results[$i]["_cover_story_id"] == $cover_story_id) {
+					$exception_message = $exception_message . "chapter._cover_story_id " . $cover_story_id . " already exists in the database and must be unique.<br>";
+				}
 			}
 		}
 
+		$select_query = NULL;
+		$select_stmt = NULL;
+		$select_results = NULL;
+
+		//Not Null Check
+		if ($chapter_number == NULL) {
+			$throw_exception = true;
+			$exception_message = $exception_message . "chapter.number cannot be NULL.<br>";
+		}
+
+		if ($chapter_title == NULL) {
+			$throw_exception = true;
+			$exception_message = $exception_message . "chapter.title cannot be NULL.<br>";
+		}
+
+		if ($publish_date == NULL) {
+			$throw_exception = true;
+			$exception_message = $exception_message . "info_cache.release_date cannot be NULL.<br>";
+		}
+
+		if ($throw_exception) {
+			throw new Exception($exception_message);
+		}
+
+		//-------------------------------------------------------------------------------------------------
+
+		try {
+
+			$insert_query = "INSERT 
+				INTO _info_cache (release_date) 
+				VALUES (:release_date);";
+
+			$insert_stmt = $pdo->prepare($insert_query);
+			$insert_stmt->bindParam(":release_date", $publish_date);
+
+			$insert_stmt->execute();
+
+			$info_cache_id = $pdo->lastInsertId("id");
+
+			$insert_query = NULL;
+			$insert_stmt = NULL;
+
+			$insert_query = "INSERT 
+				INTO _chapter (number, title, _info_cache_id, _cover_story_id, _volume_number, _story_arc_id) 
+				VALUES (:chapter_number, :chapter_title, :info_cache_id, :cover_story_id, :volume_number, :story_arc_id);";
+
+			$insert_stmt = $pdo->prepare($insert_query);
+			$insert_stmt->bindParam(":chapter_number", $chapter_number);
+			$insert_stmt->bindParam(":chapter_title", $chapter_title);
+			$insert_stmt->bindParam(":info_cache_id", $info_cache_id);
+			$insert_stmt->bindParam(":cover_story_id", $cover_story_id);
+			$insert_stmt->bindParam(":volume_number", $volume_number);
+			$insert_stmt->bindParam(":story_arc_id", $story_arc_id);
+
+			$insert_stmt->execute();
+
+			$insert_query = NULL;
+			$insert_stmt = NULL;
+
+
+		} catch (PDOException $e) {
+			echo "You should not be here!<br>";
+			die("MySQL query failed: " . $e->getMessage() . "<br>");
+		}
+
 		$pdo = null;
-		$info_cache_stmt = null;
-		$chapter_stmt = null;
 
 		header("Location: ../dataEntry.php");
 
@@ -63,9 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	} catch (PDOException $e) {
 
-		die("Query failed: " . $e->getMessage());
-	}	
+		die("MySQL query failed: " . $e->getMessage() . "<br>");
+	} catch (Exception $e) {
+
+		die("Insert query will fail.<br>" . $e->getMessage());
+	}
 }
+
 else {
 	header("Location: ../dataEntry.php");
 }

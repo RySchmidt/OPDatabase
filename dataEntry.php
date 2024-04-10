@@ -21,7 +21,7 @@
 <label> Title </label> <br>
 <input type="text" name="chapter_title"> <br>
 <label> Publish Date </label> <br>
-<input type="date" name="publish_date"> <br> <br>
+<input type="date" name="chapter_publish_date"> <br> <br>
 <input type="submit" value="Submit">
 </form>
 
