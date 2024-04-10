@@ -1,3 +1,0 @@
-DELETE FROM _chapter;
-DELETE FROM _info_cache;
-ALTER TABLE _info_cache AUTO_INCREMENT = 1;
