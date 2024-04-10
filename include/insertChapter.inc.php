@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {	
 
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	try {
 
-		require_once "include/dbh.inc.php";
+		require_once "dbh.inc.php";
 
 		//-------------------------------------------------------------------------------------------------
 		//DATA VALIDATION
@@ -122,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 			$pdo = null;
 
-			header("Location: ../dataEntry.php");
+			header("Location: /OPDatabase/pages/chapter.php");
 
 			die();
 
@@ -141,5 +142,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 else {
-	header("Location: ../dataEntry.php");
+	header("Location: /OPDatabase/pages/chapter.php");
 }

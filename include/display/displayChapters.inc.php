@@ -1,9 +1,6 @@
 <?php
-/*
-if ($_SERVER["REQUEST_METHOD"] == "POST") {	
- */
-
-require_once $_SERVER['DOCUMENT_ROOT'] . "/OPDatabase/include/dbh.inc.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
+require_once 'dbh.inc.php';
 
 try {
 
@@ -20,14 +17,33 @@ try {
 	$display_stmt = NULL;
 	$pdo = null;
 
-	header("Location: ../chapter.php");
-
 } catch (PDOException $e) {
 	echo "You should not be here!<br>";
 	die("MySQL query failed: " . $e->getMessage() . "<br>");
 }
-/*
-else {
-	header("Location: ../chapter.php");
+
+?>
+
+<!DOCTYPE html>
+<body>
+<h2> Chapters</h2> <br>
+<?php
+if (empty($display_results)) {
+	echo "<div>";
+	echo "<p> <No Chapters Found> <p>";
+	echo "<div>";
 }
- */
+else {
+	foreach ($display_results as $row) {
+		echo "<div>";
+		echo "<p>" . htmlspecialchars($row["number"]) . "<p>";
+		echo "<p>" . htmlspecialchars($row["title"]) . "<p>";
+		echo "<p>" . htmlspecialchars($row["release_date"]) . "<p>";
+		echo "<p>" . htmlspecialchars($row["_volume_number"]) . "<p>";
+		echo "<p>" . htmlspecialchars($row["_story_arc_id"]) . "<p>";
+		echo "<p>" . htmlspecialchars($row["_cover_story_id"]) . "<p>";
+		echo "</div>";
+	}
+}
+?>
+</body>

@@ -8,3 +8,4 @@ Resources
 
 Struggles
 	The Validation Method: I spent an entire day attempting to create a method to validate my SQL queries only to relise that you cannot input table or column names a parameters.
+	Building the website to be easily expandable

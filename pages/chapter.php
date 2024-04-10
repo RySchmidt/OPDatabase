@@ -1,3 +1,7 @@
+<?php 
+require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -39,14 +43,10 @@
 
 </div>
 
-<div> 
-<h2> Chapters </h2>
 
 <?php
-require 'test.inc.php';
+require 'display/displayChapters.inc.php'
 ?>
-
-</div>
 
 </body>
 </html>

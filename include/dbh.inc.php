@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 
 $dsn = "mysql:host=localhost;dbname=one_piece_unspoiled";
 $dbusername = "root";
