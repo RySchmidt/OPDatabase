@@ -1,49 +1,65 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
-require_once 'dbh.inc.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . "/OPDatabase/config.php";
+require "dbh.inc.php";
+?>
+
+<link rel="stylesheet" href="/OPDatabase/css/displayTable.css">
+<h2> Chapters</h2> <br>
+
+<?php
 
 try {
 
-	$display_query = "SELECT *
+	$select_query = "SELECT *
 		FROM _chapter
-		INNER JOIN _info_cache ON _chapter._info_cache_id = _info_cache.id";
+		INNER JOIN _info_cache ON _chapter._info_cache_id = _info_cache.id;";
 
-	$display_stmt = $pdo->prepare($display_query);
-	$display_stmt->execute();
+	$select_stmt = $pdo->prepare($select_query);
+	$select_stmt->execute();
 
-	$display_results = $display_stmt->fetchAll(PDO::FETCH_ASSOC);
+	$query_results = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	$display_query = NULL;
-	$display_stmt = NULL;
-	$pdo = null;
+	$select_query = NULL;
+	$select_stmt = NULL;
+	$pdo = NULL;
 
 } catch (PDOException $e) {
 	echo "You should not be here!<br>";
 	die("MySQL query failed: " . $e->getMessage() . "<br>");
 }
 
-?>
-
-<!DOCTYPE html>
-<body>
-<h2> Chapters</h2> <br>
-<?php
-if (empty($display_results)) {
+if (empty($query_results)) {
 	echo "<div>";
-	echo "<p> <No Chapters Found> <p>";
+	echo "<p> <No chapters found in database.> <p>";
 	echo "<div>";
 }
 else {
-	foreach ($display_results as $row) {
-		echo "<div>";
-		echo "<p>" . htmlspecialchars($row["number"]) . "<p>";
-		echo "<p>" . htmlspecialchars($row["title"]) . "<p>";
-		echo "<p>" . htmlspecialchars($row["release_date"]) . "<p>";
-		echo "<p>" . htmlspecialchars($row["_volume_number"]) . "<p>";
-		echo "<p>" . htmlspecialchars($row["_story_arc_id"]) . "<p>";
-		echo "<p>" . htmlspecialchars($row["_cover_story_id"]) . "<p>";
-		echo "</div>";
+	echo "<table class='display' id='chapterTable'>";
+	
+	echo "<thead>";
+	echo "<tr class='display'>";
+	echo "<th class='display' onclick=\"sortTable('chapterTable', 0)\"> Volume <br> Number </th>";
+	echo "<th class='display' onclick=\"sortTable('chapterTable', 1)\"> Chapter <br> Number </th>";
+	echo "<th class='display' onclick=\"sortTable('chapterTable', 2)\"> Title </th>";
+	echo "<th class='display' onclick=\"sortTable('chapterTable', 3)\"> Publish Date </th>";
+	echo "<th class='display' onclick=\"sortTable('chapterTable', 4)\"> Story Arc </th>";
+	echo "</tr>";
+	echo "<thead>";
+
+	echo "<tbody>";
+	foreach ($query_results as $row) { 
+		echo "<tr class='display'>"; 
+		echo "<td class='display'>" . htmlspecialchars($row["_volume_number"]) . "</td>";
+		echo "<td class='display'>" . htmlspecialchars($row["number"]) . "</td>";
+		echo "<td class='display'>" . htmlspecialchars($row["title"]) . "</td>";
+		echo "<td class='display'>" . htmlspecialchars($row["release_date"]) . "</td>";
+		echo "<td class='display'>" . htmlspecialchars($row["_story_arc_id"]) . "</td>";
+		echo "</tr>";
 	}
+	echo "<tbody>";
+
+	echo "</table>";
 }
 ?>
-</body>
+
+<script src="/OPDatabase/javaScript/sortTable.js"></script>

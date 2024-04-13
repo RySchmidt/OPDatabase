@@ -1,0 +1,12 @@
+.formsColumn {
+	width: 25%;
+	float: left;
+	text-align: left;
+	padding: 10px;
+}
+
+.formsRow:after {
+	content: "";
+	display: table;
+	clear: both;
+}

@@ -11,9 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	//UNIQUE
 	//NOT NULL
 
-	$cover_story_id = $_POST["cover_story_id"];
-	//UNIQUE
-
 	$publish_date = $_POST["chapter_publish_date"];
 	//NOT NULL
 
@@ -37,12 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		//Unique Check
 		$select_query = "SELECT *
 			FROM _chapter
-			WHERE number = :chapter_number OR title = :chapter_title OR _cover_story_id = :cover_story_id;";
+			WHERE number = :chapter_number OR title = :chapter_title";
 
 		$select_stmt = $pdo->prepare($select_query);
 		$select_stmt->bindParam(":chapter_number", $chapter_number);
 		$select_stmt->bindParam(":chapter_title", $chapter_title);
-		$select_stmt->bindParam(":cover_story_id", $cover_story_id);
 
 		$select_stmt->execute();
 		$select_results = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -55,9 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				}
 				if ($chapter_title != NULL && $select_results[$i]["title"] == $chapter_title) {
 					$exception_message = $exception_message . "chapter.title " . $chapter_title . " already exists in the database and must be unique.<br>";
-				}
-				if ($cover_story_id != NULL && $select_results[$i]["_cover_story_id"] == $cover_story_id) {
-					$exception_message = $exception_message . "chapter._cover_story_id " . $cover_story_id . " already exists in the database and must be unique.<br>";
 				}
 			}
 		}
@@ -105,14 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$insert_stmt = NULL;
 
 			$insert_query = "INSERT 
-				INTO _chapter (number, title, _info_cache_id, _cover_story_id, _volume_number, _story_arc_id) 
-				VALUES (:chapter_number, :chapter_title, :info_cache_id, :cover_story_id, :volume_number, :story_arc_id);";
+				INTO _chapter (number, title, _info_cache_id, _volume_number, _story_arc_id) 
+				VALUES (:chapter_number, :chapter_title, :info_cache_id, :volume_number, :story_arc_id);";
 
 			$insert_stmt = $pdo->prepare($insert_query);
 			$insert_stmt->bindParam(":chapter_number", $chapter_number);
 			$insert_stmt->bindParam(":chapter_title", $chapter_title);
 			$insert_stmt->bindParam(":info_cache_id", $info_cache_id);
-			$insert_stmt->bindParam(":cover_story_id", $cover_story_id);
 			$insert_stmt->bindParam(":volume_number", $volume_number);
 			$insert_stmt->bindParam(":story_arc_id", $story_arc_id);
 

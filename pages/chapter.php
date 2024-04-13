@@ -1,13 +1,13 @@
+<!DOCTYPE html>
+<html>
+
 <?php 
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-
 <head>
 <title> One Piece Unspoiled - Chapters </title>
-<link rel="stylesheet" href="/OPDatabase/css/tableStyle.css">
+<link rel="stylesheet" href="/OPDatabase/css/formAlignment.css">
 </head>
 
 <body>
@@ -16,37 +16,34 @@ require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 </div>
 
 <!-- Data Entry -->
-<div class="row">
 
-<div class="column">
-<h2> Insert Chapter </h2>
+<div class="formsRow">
 
-<form action="/OPDatabase/include/insertChapter.inc.php" method="POST">
-<label> Chapter # </label> <br>
-<input type="number" name="chapter_number"> <br>
-<label> Title </label> <br>
-<input type="text" name="chapter_title"> <br>
-<label> Publish Date </label> <br>
-<input type="date" name="chapter_publish_date"> <br> <br>
-<input type="submit" value="Submit">
-</form>
-
-</div>
-
-<div class="column">
-<h2> Update Chapter </h2>
-</div>
-
-<div class="column">
-<h2> Delete Chapter </h2>
-</div>
-
-</div>
-
-
+<div class="formsColumn">
 <?php
-require 'display/displayChapters.inc.php'
+require "forms/insertChapterForm.inc.php";
 ?>
+</div>
+
+<div class="formsColumn">
+<?php
+require "forms/updateChapterForm.inc.php";
+?>
+</div>
+
+<div class="formsColumn">
+<?php
+require "forms/deleteChapterForm.inc.php";
+?>
+</div>
+
+</div>
+
+<div>
+<?php
+require 'display/displayChapters.inc.php';
+?>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,23 @@
+table.form {
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+th.form {
+	padding: 8px;
+}
+
+tr.form {
+	padding: 8px;
+}
+
+td.form {
+	text-align: left;
+	padding: 8px;
+}
+
+td.formSubmit {
+	text-align: right;
+	padding: 8px;
+}
+
