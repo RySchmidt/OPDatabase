@@ -1,85 +1,55 @@
 <?php
+declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {	
 
 	$chapter_number = $_POST["chapter_number"];
-	//UNIQUE
-	//NOT NULL
-
 	$chapter_title = $_POST["chapter_title"];
-	//UNIQUE
-	//NOT NULL
-
 	$publish_date = $_POST["chapter_publish_date"];
-	//NOT NULL
 
-	//NO CONSTRAINTS
 	$volume_number = $_POST["volume_number"];
 	$story_arc_id = $_POST["story_arc_id"];
 
 	try {
 
 		require_once "dbh.inc.php";
+		require_once "query/chapterModel.inc.php";
+		require_once "query/chapterContr.inc.php";
 
-		//-------------------------------------------------------------------------------------------------
-		//DATA VALIDATION
+		// ERROR 
 
-		$throw_exception = false;
-		$exception_message = "";
+		$errors = [];
 
-		//Primary Key Check
-		//Does not need to be checked because info cache will always make a new id.
+		if (isInputEmpty($chapter_number, $chapter_title, $publish_date)) {
+			$errors["empty_input"] = "Fill in required fields (Chapter Number, Chapter Title and Publish Date).";	
+		}
+		if (!isChapterNumberUnique($pdo, $chapter_number)) {
+			$errors["invalid_chapter_number"] = "Chapter number (" . $chapter_number . ") already exists within the database.";
+		}
+		if (!isChapterTitleUnique($pdo, $chapter_title)) {
+			$errors["invalid_chapter_title"] = "Chapter title (" . $chapter_title . ") already exists within the database.";
+		}
+		
+		require_once "configSession.inc.php";
 
-		//Unique Check
-		$select_query = "SELECT *
-			FROM _chapter
-			WHERE number = :chapter_number OR title = :chapter_title";
-
-		$select_stmt = $pdo->prepare($select_query);
-		$select_stmt->bindParam(":chapter_number", $chapter_number);
-		$select_stmt->bindParam(":chapter_title", $chapter_title);
-
-		$select_stmt->execute();
-		$select_results = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		if (!empty($select_results)) {
-			$throw_exception = true;
-			for ($i = 0; $i < sizeof($select_results); $i++) {
-				if ($chapter_number != NULL && $select_results[$i]["number"] == $chapter_number) {
-					$exception_message = $exception_message . "chapter.number " . $chapter_number . " already exists in the database and must be unique.<br>";
-				}
-				if ($chapter_title != NULL && $select_results[$i]["title"] == $chapter_title) {
-					$exception_message = $exception_message . "chapter.title " . $chapter_title . " already exists in the database and must be unique.<br>";
-				}
-			}
+		if ($errors) {
+			$_SESSION["errors_insert_chapter"] = $errors;
+			header("Location: /OPDatabase/pages/chapter.php");
 		}
 
-		$select_query = NULL;
-		$select_stmt = NULL;
-		$select_results = NULL;
+	} catch (PDOException $e) {
+		echo "<p> YOU SHOULD NOT BE HERE </p> <br>
+		die("MySQL query failed: " . $e->getMessage() . "<br>");
+	}
+}
 
-		//Not Null Check
-		if ($chapter_number == NULL) {
-			$throw_exception = true;
-			$exception_message = $exception_message . "chapter.number cannot be NULL.<br>";
-		}
+else {
+	header("Location: /OPDatabase/pages/chapter.php");
+	die();
+}
 
-		if ($chapter_title == NULL) {
-			$throw_exception = true;
-			$exception_message = $exception_message . "chapter.title cannot be NULL.<br>";
-		}
-
-		if ($publish_date == NULL) {
-			$throw_exception = true;
-			$exception_message = $exception_message . "info_cache.release_date cannot be NULL.<br>";
-		}
-
-		if ($throw_exception) {
-			throw new Exception($exception_message);
-		}
-
-		//-------------------------------------------------------------------------------------------------
+/*
 
 		try {
 
@@ -133,6 +103,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 }
 
-else {
-	header("Location: /OPDatabase/pages/chapter.php");
-}
+ */

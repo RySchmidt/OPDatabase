@@ -3,6 +3,8 @@
 
 <?php 
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
+require_once "configSession.inc.php";
+require_once "query/chapterView.inc.php";
 ?>
 
 <head>
@@ -15,7 +17,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 <a href="/OPDatabase/index.php">Return to Main Page</a>
 </div>
 
-<!-- Data Entry -->
 
 <div class="formsRow">
 
@@ -38,6 +39,10 @@ require "forms/deleteChapterForm.inc.php";
 </div>
 
 </div>
+
+<?php
+checkInsertChapterErrors();
+?>
 
 <div>
 <?php
