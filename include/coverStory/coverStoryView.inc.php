@@ -3,21 +3,21 @@ declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . "/OPDatabase/config.php";
 require_once "storyArc/storyArcContr.inc.php";
 
-function hiddenCoverStoryTitle (string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["cover_story_title"])) {
-		echo "<input type='hidden' name='original_cover_story_title' value='" . $_SESSION[$id . "_query_data"]["cover_story_title"] . "'>";
+function hiddenCoverStoryField(string $query_data, string $query_name, string $name, string $default_value = "") {
+	if (isset($_SESSION[$query_data . "_query_data"][$query_name])) {
+		echo "<input type='hidden' name='" . $name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
 	else {
-		echo "<input type='hidden' name='originial_cover_story_title' value='-1'>";
+		echo "<input type='hidden' name='". $name . "' value='" . $defualt_value . "'>";
 	}
 }
 
-function coverStoryTitleField() {
-	if (isset($_SESSION[$id . "_query_data"]["cover_story_title"]) && !isset($_SESSION[$id . "_cover_story_errors"]["invalid_cover_story_title"])) {
-		echo "<input type='text' name='cover_story_title' value='" . $_SESSION[$id . "_query_data"]["cover_story_title"] . "'>";
+function coverStoryField(string $query_data, string $query_name, string $type, string $name, string $error_data = "", string $error = "") {
+	if (isset($_SESSION[$query_data . "_query_data"][$query_name]) && !isset($_SESSION[$error_data . "_cover_story_errors"][$error])) {
+		echo "<input type='" . $type . "' name='" . $name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
 	else {
-		echo "<input type='text' name='cover_story_title'>";
+		echo "<input type='". $type . "' name='". $name . "'>";
 	}
 }
 
@@ -75,25 +75,15 @@ function coverStorySelection(string $id) {
 	echo "</select>";
 }
 
-function checkCoverStoryErrors() {
-	if (isset($_SESSION["cover_story_errors"])) {
-		$errors = $_SESSION["cover_story_errors"];
+function checkCoverStoryErrors(string $name) {
+	if (isset($_SESSION[$name . "_cover_story_errors"])) {
+		$errors = $_SESSION[$name . "_cover_story_errors"];
 
 		foreach ($errors as $error) {
 			echo "<p class='form-error'>" . $error . "</p>";
 		}
 
-		unset($_SESSION["cover_story_errors"]);
-	}
-
-	if (isset($_SESSION["modify_A_cover_story_errors"])) {
-		$errors = $_SESSION["modify_A_cover_story_errors"];
-
-		foreach ($errors as $error) {
-			echo "<p class='form-error'>" . $error . "</p>";
-		}
-
-		unset($_SESSION["modify_A_cover_story_errors"]);
+		unset($_SESSION[$name . "_cover_story_errors"]);
 	}
 }
 

@@ -5,57 +5,21 @@ require_once "chapter/chapterContr.inc.php";
 require_once "volume/volumeContr.inc.php";
 require_once "storyArc/storyArcContr.inc.php";
 
-function hiddenChapterInfoCacheId (string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_info_cache_id"])) {
-		echo "<input type='hidden' name='original_chapter_info_cache_id' value='" . $_SESSION[$id . "_query_data"]["chapter_info_cache_id"] . "'>";
+function hiddenChapterField(string $query_data, string $query_name, string $name, string $default_value = "") {
+	if (isset($_SESSION[$query_data . "_query_data"][$query_name])) {
+		echo "<input type='hidden' name='" . $name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
 	else {
-		echo "<input type='hidden' name='original_chapter_info_cache_id' value='-1'>";
+		echo "<input type='hidden' name='". $name . "' value='" . $defualt_value . "'>";
 	}
 }
 
-function hiddenChapterNumber (string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_number"])) {
-		echo "<input type='hidden' name='original_chapter_number' value='" . $_SESSION[$id . "_query_data"]["chapter_number"] . "'>";
+function chapterField(string $query_data, string $query_name, string $type, string $name, string $error_data = "", string $error = "") {
+	if (isset($_SESSION[$query_data . "_query_data"][$query_name]) && !isset($_SESSION[$error_data . "_chapter_errors"][$error])) {
+		echo "<input type='" . $type . "' name='" . $name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
 	else {
-		echo "<input type='hidden' name='original_chapter_number' value='-1'>";
-	}
-}
-
-function hiddenChapterTitle (string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_title"])) {
-		echo "<input type='hidden' name='original_chapter_title' value='" . $_SESSION[$id . "_query_data"]["chapter_title"] . "'>";
-	}
-	else {
-		echo "<input type='hidden' name='original_chapter_title' value='-1'>";
-	}
-}
-
-function chapterNumberField(string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_number"]) && !isset($_SESSION[$id . "chapter_errors"]["invalid_chapter_number"])) {
-		echo "<input type='number' name='chapter_number' value='" . $_SESSION[$id . "_query_data"]["chapter_number"] . "'>";
-	}
-	else {
-		echo "<input type='number' name='chapter_number'>";
-	}
-}
-
-function chapterTitleField(string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_title"]) && !isset($_SESSION[$id . "_chapter_errors"]["invalid_chapter_title"])) {
-		echo "<input type='text' name='chapter_title' value='" . $_SESSION[$id . "_query_data"]["chapter_title"] . "'>";
-	}
-	else {
-		echo "<input type='text' name='chapter_title'>";
-	}
-}
-
-function chapterPublishDateField(string $id) {
-	if (isset($_SESSION[$id . "_query_data"]["chapter_publish_date"]) && !isset($_SESSION[$id . "_chapter_errors"]["invalid_publish_date"])) {
-		echo "<input type='date' name='chapter_publish_date' value='" . $_SESSION[$id . "_query_data"]["chapter_publish_date"] . "'>";
-	}
-	else {
-		echo "<input type='date' name='chapter_publish_date'>";
+		echo "<input type='". $type . "' name='". $name . "' value='" . "'>";
 	}
 }
 
@@ -65,15 +29,15 @@ function chapterSelection(string $id) {
 
 	try {
 		require "dbh.inc.php";
-		$results = getAllChapters($pdo);
+		$results = getAllInfoCacheChapters($pdo);
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if (isset($_SESSION[$id . "_query_data"]["chapter_number"]) && $_SESSION[$id . "_query_data"]["chapter_number"] == $result["number"]) {
-					echo "<option value='" . htmlspecialchars((string)$result["number"]) . "' selected> " . htmlspecialchars((string)$result["number"]) . " - " . htmlspecialchars($result["title"]) . " </option>";	
+				if (isset($_SESSION[$id . "_query_data"]["chapter_number"]) && $_SESSION[$id . "_query_data"]["chapter_number"] == $result["chapter_number"]) {
+					echo "<option value='" . htmlspecialchars((string)$result["chapter_number"]) . "' selected> " . htmlspecialchars((string)$result["chapter_number"]) . " - " . htmlspecialchars($result["chapter_title"]) . " </option>";	
 				}			
 				else {
-					echo "<option value='" . htmlspecialchars((string)$result["number"]) . "'> " . htmlspecialchars((string)$result["number"]) . " - " . htmlspecialchars($result["title"]) . " </option>";
+					echo "<option value='" . htmlspecialchars((string)$result["chapter_number"]) . "'> " . htmlspecialchars((string)$result["chapter_number"]) . " - " . htmlspecialchars($result["chapter_title"]) . " </option>";
 				}
 			}
 		}
@@ -93,6 +57,7 @@ function chapterVolumeNumberSelection(string $id) {
 	try {
 		require "dbh.inc.php";
 		$results = getVolumes($pdo);
+
 		if(!empty($results)) {
 			foreach ($results as $result) {
 				if (isset($_SESSION[$id . "_query_data"]["chapter_volume_number"]) && $_SESSION["query_date"]["chapter_volume_number"] == $result["number"]) {
@@ -148,7 +113,7 @@ function displayAllChapters() {
 
 	try {
 		require "dbh.inc.php";
-		$results = getAllChaptersData($pdo);
+		$results = getAllChaptersCoverStories($pdo);
 
 		if (empty($results)) {
 			echo "<div>";
@@ -179,7 +144,7 @@ function displayAllChapters() {
 				echo "<td class='display'>" . htmlspecialchars((string)$result["chapter_number"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["chapter_title"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["_chapter_story_arc_title"]) . "</td>";
-				echo "<td class='display'>" . htmlspecialchars((string)$result["_cover_story_title"]) . "</td>";
+				echo "<td class='display'>" . htmlspecialchars((string)$result["cover_story_title"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["_cover_story_arc_title"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["publish_date"]) . "</td>";
 				echo "</tr>";
@@ -195,25 +160,15 @@ function displayAllChapters() {
 	}
 }
 
-function checkChapterErrors() {
-	if (isset($_SESSION["chapter_errors"])) {
-		$errors = $_SESSION["chapter_errors"];
+function checkChapterErrors(string $name) {
+	if (isset($_SESSION[$name . "_chapter_errors"])) {
+		$errors = $_SESSION[$name . "_chapter_errors"];
 
 		foreach ($errors as $error) {
 			echo "<p class='form-error'>" . $error . "</p>";
 		}
-			
-		unset($_SESSION["chapter_errors"]);
-	}
-
-	if (isset($_SESSION["modify_A_chapter_errors"])) {
-		$errors = $_SESSION["modify_A_chapter_errors"];
-
-		foreach ($errors as $error) {
-			echo "<p class='form-error'>" . $error . "</p>";
-		}
-
-		unset($_SESSION["modify_A_chapter_errors"]);
+		
+		unset($_SESSION[$name . "_chapter_errors"]);
 	}
 }
 

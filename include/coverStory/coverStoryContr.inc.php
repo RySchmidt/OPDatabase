@@ -17,7 +17,7 @@ function isCoverStoryTitleUnique(object $pdo, string $cover_story_title) {
 	return true;
 }	
 
-function getCoverStoryChapterNumber(object $pdo, int $chapter_number) {
+function getCoverStoryFromChapterNumber(object $pdo, int $chapter_number) {
 	return selectCoverStoryChapterNumber($pdo, $chapter_number);
 }
 
@@ -36,3 +36,8 @@ function addCoverStory(object $pdo, int $chapter_number, string $cover_story_tit
 function modifyCoverStory(object $pdo, int $chapter_number, string $cover_story_title, int $cover_story_arc_id, string $publish_date) {
 	updateCoverStory($pdo, $chapter_number, $cover_story_title, $cover_story_arc_id, $publish_date);
 }
+
+function viewInfoCacheCoverStory(object $pdo) {
+	updateViewInfoCacheCoverStory($pdo);
+}
+

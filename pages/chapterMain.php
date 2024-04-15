@@ -35,7 +35,7 @@ require_once "coverStory/coverStoryView.inc.php";
 <td class="form"> <label name="chapter_number"> Chapter Number: </label> </td>
 <td class="form">
 <?php
-chapterNumberField("insert");
+chapterField("insert", "chapter_number", "number", "chapter_number", "chapter", "invalid_chapter_number");
 ?>
 </td>
 </tr>
@@ -44,7 +44,7 @@ chapterNumberField("insert");
 <td class="form"> <label name="chapter_title"> Chapter Title: </label> </td>
 <td class="form">
 <?php
-chapterTitleField("insert");
+chapterField("insert", "chapter_title", "text", "chapter_title", "chapter", "invalid_chapter_title");
 ?>
 </td>
 </tr>
@@ -53,7 +53,7 @@ chapterTitleField("insert");
 <td class="form"> <label name="chapter_publish_date"> Publish Date: </label> </td>
 <td class="form">
 <?php
-chapterPublishDateField("insert");
+chapterField("insert", "chapter_publish_date", "date", "chapter_publish_date", "chapter");
 ?>
 </td>
 </tr>
@@ -80,20 +80,19 @@ chapterStoryArcSelection("insert");
 <td class="form"> <label name="cover_story_title"> Cover Story Title: </label> </td>
 <td class="form">
 <?php
-coverStoryTitleField("insert");
+coverStoryField("insert", "cover_story_title", "text", "cover_story_title", "cover_story", "invalid_cover_story_title");
 ?>
 </td>
 </tr>
 
 <tr class="form">
-<td class="form"> <label name="cover_story_arc_id"> Cover Story Arc: </label> </td>
+<td class="form"> <label name="cover_story_arc"> Cover Story Arc: </label> </td>
 <td class="form">
 <?php
 coverStoryArcSelection("insert");
 ?>
 </td>
 </tr>
-
 
 <tr class="form">
 <td class="form"> <input type="submit" value="Submit"> </td>
@@ -139,10 +138,10 @@ chapterSelection("modify");
 <form action="/OPDatabase/include/formAction/modifyChapter.inc.php" method="POST">
 
 <?php
-hiddenChapterInfoCacheId("modify");
-hiddenChapterNumber("modify");
-hiddenChapterTitle("modify");
-hiddenCoverStoryTitle("modify");
+hiddenChapterField("modify", "chapter_info_cache_id", "chapter_info_cache_id", "-1");
+hiddenChapterField("modify", "chapter_number", "original_chapter_number", "-1");
+hiddenChapterField("modify", "chapter_title", "original_chapter_title");
+hiddenCoverStoryField("modify", "cover_story_title", "original_cover_story_title");
 ?>
 
 
@@ -151,7 +150,7 @@ hiddenCoverStoryTitle("modify");
 <td class="form"> <label name="chapter_number"> Chapter Number: </label> </td>
 <td class="form">
 <?php
-chapterNumberField("modify");
+chapterField("modify", "chapter_number", "number", "chapter_number");
 ?>
 </td>
 </tr>
@@ -160,7 +159,7 @@ chapterNumberField("modify");
 <td class="form"> <label name="chapter_title"> Chapter Title: </label> </td>
 <td class="form">
 <?php
-chapterTitleField("modify");
+chapterField("modify", "chapter_title", "text", "chapter_title");
 ?>
 </td>
 </tr>
@@ -169,7 +168,7 @@ chapterTitleField("modify");
 <td class="form"> <label name="chapter_publish_date"> Publish Date: </label> </td>
 <td class="form">
 <?php
-chapterPublishDateField("modify");
+chapterField("modify", "chapter_publish_date", "date", "chapter_publish_date");
 ?>
 </td>
 </tr>
@@ -196,7 +195,7 @@ chapterStoryArcSelection("modify");
 <td class="form"> <label name="cover_story_title"> Cover Story Title: </label> </td>
 <td class="form">
 <?php
-coverStoryTitleField("modify");
+coverStoryField("insert", "cover_story_title", "text", "cover_story_title");
 ?>
 </td>
 </tr>
@@ -286,8 +285,14 @@ coverStorySelection("delete");
 </div>
 <div>
 <?php
-checkChapterErrors();
-checkCoverStoryErrors();
+checkChapterErrors("insert");
+checkCoverStoryErrors("insert");
+
+checkChapterErrors("modify");
+checkCoverStoryErrors("modify");
+
+checkChapterErrors("delete");
+checkCoverStoryErrors("delete");
 ?>
 </div>
 

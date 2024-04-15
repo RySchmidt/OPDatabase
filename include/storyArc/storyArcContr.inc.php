@@ -6,3 +6,7 @@ require_once "storyArc/storyArcModel.inc.php";
 function getStoryArcs(object $pdo) {
 	return selectStoryArcs($pdo);
 }	
+
+function viewStoryArcCombined(object $pdo) {
+	updateViewStoryArcCombined($pdo);
+}

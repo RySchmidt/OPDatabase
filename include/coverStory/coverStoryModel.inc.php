@@ -95,7 +95,7 @@ function updateCoverStory(object $pdo, int $chapter_number, string $cover_story_
 	if ($cover_story_arc_id <= 0) {
 		$story_arc_id = null;	
 	}
-	
+
 	$result = selectCoverStoryChapterNumber($pdo, $chapter_number);
 	$cover_story_info_cache_id = $result["_info_cache_id"];
 
@@ -110,7 +110,7 @@ function updateCoverStory(object $pdo, int $chapter_number, string $cover_story_
 
 	$query = "UPDATE _cover_story
 		SET _cover_story.title = :cover_story_title, _cover_story._story_arc_id = :cover_story_arc_id;
-		WHERE cover_story.id = :cover_story_info_cache_id;";
+	WHERE cover_story.id = :cover_story_info_cache_id;";
 
 	$stmt = $pdo->prepare($query);
 	$stmt->bindParam(":cover_story_title", $cover_story_title);
@@ -119,4 +119,17 @@ function updateCoverStory(object $pdo, int $chapter_number, string $cover_story_
 
 	$stmt->execute();
 
+}
+
+
+function updateViewInfoCacheCoverStory(object $pdo) {
+	$query = "CREATE OR REPLACE VIEW _info_cache_cover_story AS
+		SELECT _cover_story._info_cache_id AS _cover_story_info_cache_id, _info_cache.publish_date, _cover_story._chapter_number, _cover_story.title AS cover_story_title, _cover_story._story_arc_id AS _cover_story_arc_id
+		FROM _info_cache
+		INNER JOIN _cover_story
+		ON _info_cache.id = _cover_story._info_cache_id;";
+
+	$stmt = $pdo->prepare($query);
+
+	$stmt->execute();
 }
