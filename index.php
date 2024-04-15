@@ -15,12 +15,8 @@ One Piece Unspoiled
 <h1>
 One Piece Unspoiled
 </h1>
-<a href="/OPDatabase/pages/chapter.php"> Chapter </a>
+<a href="/OPDatabase/pages/chapterMain.php"> Chapter </a>
 <br>
-
-<?php 
-echo ROOT_DIR;
-?>
 
 </body>
 </html>

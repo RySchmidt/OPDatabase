@@ -1,10 +1,13 @@
 table.form {
+	width: 100%;
 	border: 2px solid black;
 	border-collapse: collapse;
 }
 
 th.form {
+	text-align: center;
 	padding: 8px;
+	word-wrap: break-word;
 }
 
 tr.form {
@@ -12,8 +15,11 @@ tr.form {
 }
 
 td.form {
+	max-width: 50%;
+	width: 50%;
 	text-align: left;
 	padding: 8px;
+	word-wrap: break-word;
 }
 
 td.formSubmit {
@@ -21,3 +27,9 @@ td.formSubmit {
 	padding: 8px;
 }
 
+select.form {
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
