@@ -36,18 +36,18 @@ try {
 	$chapter_result = getChapterFromNumber($pdo, $chapter_number);
 	$cover_story_result = getCoverStoryFromChapterNumber($pdo, $chapter_number);
 
-	$queryData = [
+	$query_data = [
 		"chapter_info_cache_id" => $chapter_result["_chapter_info_cache_id"],
 		"chapter_number" => $chapter_result["chapter_number"],
 		"chapter_title" => $chapter_result["chapter_title"],
 		"chapter_publish_date" => $chapter_result["publish_date"],
 		"chapter_volume_number" => $chapter_result["_volume_number"],
-		"chapter_story_arc_id" => $chapter_result["_story_arc_id"],
-		"cover_story_info_cache_id" => $cover_story_result["_info_cache_id"],
-		"cover_story_title" => $cover_story_result["title"],
-		"cover_story_arc_id" =>$cover_story_result["_story_arc_id"]
+		"chapter_story_arc_id" => $chapter_result["_chapter_story_arc_id"],
+		"cover_story_info_cache_id" => $cover_story_result["_cover_story_info_cache_id"],
+		"cover_story_title" => $cover_story_result["cover_story_title"],
+		"cover_story_arc_id" =>$cover_story_result["_cover_story_arc_id"]
 	];
-	$_SESSION["modify_query_data"] = $queryData;
+	$_SESSION["modify_query_data"] = $query_data;
 
 	$pdo = null;
 	$stmt = null;

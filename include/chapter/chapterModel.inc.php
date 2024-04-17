@@ -123,7 +123,8 @@ function updateViewInfoCacheChapter(object $pdo) {
 		SELECT _chapter._info_cache_id AS _chapter_info_cache_id, _info_cache.publish_date, _volume_number, _chapter.number as chapter_number, _chapter.title AS chapter_title, _chapter._story_arc_id AS _chapter_story_arc_id
 		FROM _info_cache
 		INNER JOIN _chapter
-		ON _info_cache.id = _chapter._info_cache_id;";
+		ON _info_cache.id = _chapter._info_cache_id
+		ORDER BY chapter_number ASC;";
 
 	$stmt = $pdo->prepare($query);
 
@@ -142,7 +143,7 @@ function selectAllInfoCacheChapters(object $pdo) {
 	return $results;
 }
 
-function selectChapterFromInfoCacheId(object $pdo, string $info_cache_id) {
+function selectChapterFromInfoCacheId(object $pdo, int $info_cache_id) {
 	updateViewInfoCacheChapter($pdo);
 	$query = "SELECT *
 		FROM _info_cache_chapter
@@ -157,26 +158,51 @@ function selectChapterFromInfoCacheId(object $pdo, string $info_cache_id) {
 	return $results;
 }
 
-function selectAllInfoCacheChaptersCoverStories(object $pdo) {
+function selectChapterInputDisplay(object $pdo) {
 	updateViewInfoCacheChapter($pdo);	
 	viewInfoCacheCoverStory($pdo);
-	viewStoryArcCombined($pdo);
+	viewAdvancedStoryArc($pdo);
 
-	$query = "SELECT T1.*, T2.cover_story_title, T2._cover_story_arc_id, T2._cover_story_arc_title, T2._cover_story_arc_parent, T2._cover_story_arc_parent_title
-		FROM (SELECT _info_cache_chapter.*, _story_arc_combined.story_arc_title AS _chapter_story_arc_title, _story_arc_combined._story_arc_parent AS _chapter_story_arc_parent, _story_arc_combined._story_arc_parent_title AS chapter_story_arc_parent_title
+	$query = "SELECT T1.*, T2._cover_story_arc_id, T2._cover_story_arc_title, T2._cover_story_arc_parent, T2._cover_story_arc_parent_title
+		FROM (SELECT _info_cache_chapter.*, _advanced_story_arc.story_arc_id, _advanced_story_arc.story_arc_title, _advanced_story_arc._parent_story_arc, _advanced_story_arc._parent_story_arc_title
 		FROM _info_cache_chapter
-		LEFT JOIN _story_arc_combined
-		ON _info_cache_chapter._chapter_story_arc_id = _story_arc_combined.story_arc_id) AS T1
+		LEFT JOIN _advanced_story_arc
+		ON _info_cache_chapter._chapter_story_arc_id = _advanced_story_arc.story_arc_id) AS T1
 		LEFT JOIN 
-		(SELECT _info_cache_cover_story.*, _story_arc_combined.story_arc_title AS _cover_story_arc_title, _story_arc_combined._story_arc_parent AS _cover_story_arc_parent, _story_arc_combined._story_arc_parent_title AS _cover_story_arc_parent_title
+		(SELECT _info_cache_cover_story.*, _advanced_story_arc.story_arc_title AS _cover_story_arc_title, _advanced_story_arc._parent_story_arc AS _cover_story_arc_parent, _advanced_story_arc._parent_story_arc_title AS _cover_story_arc_parent_title
 		FROM _info_cache_cover_story
-		LEFT JOIN _story_arc_combined
-		ON _info_cache_cover_story._cover_story_arc_id = _story_arc_combined.story_arc_id) AS T2
-		ON T1.chapter_number = T2._chapter_number;";
+		LEFT JOIN _advanced_story_arc
+		ON _info_cache_cover_story._cover_story_arc_id = _advanced_story_arc.story_arc_id) AS T2
+		ON T1.chapter_number = T2._chapter_number  
+		ORDER BY T1.chapter_number ASC;";
 
 	$stmt = $pdo->prepare($query);
 
 	$stmt->execute();
 	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	return $results;
+}
+
+function clearChapterVolumeNumber($pdo, $volume_number) {	
+	$query = "UPDATE _chapter
+		SET _chapter._volume_number = NULL
+		WHERE _chapter._volume_number = :volume_number";
+
+	$stmt = $pdo->prepare($query);
+	$stmt->bindParam(":volume_number", $volume_number);
+
+	$stmt->execute();
+}
+
+function updateChatperVolumeNumber($pdo, $volume_number, $min_chapter_number, $max_chapter_number) {
+	$query = "UPDATE _chapter
+		SET _chapter._volume_number = :volume_number
+		WHERE _chapter.number >= :min_chapter_number AND _chapter.number <= :max_chapter_number";
+
+	$stmt = $pdo->prepare($query);
+	$stmt->bindParam(":volume_number", $volume_number);
+	$stmt->bindParam(":min_chapter_number", $min_chapter_number);
+	$stmt->bindParam(":max_chapter_number", $max_chapter_number);
+
+	$stmt->execute();
 }

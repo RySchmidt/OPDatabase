@@ -5,7 +5,10 @@ Resources
 	Geeks for Geeks
 	PHP Manual
 	MySQL Manual
+	MySQLTutorial
 
 Struggles
 	The Validation Method: I spent an entire day attempting to create a method to validate my SQL queries only to relise that you cannot input table or column names a parameters.
 	Building the website to be easily expandable
+	Discovering how to get the differt web site pages to comunicate with each other
+	Optimizing my code for when I expanded it later

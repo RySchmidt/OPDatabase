@@ -12,11 +12,10 @@ One Piece Unspoiled
 </head>
 
 <body>
-<h1>
-One Piece Unspoiled
-</h1>
-<a href="/OPDatabase/pages/chapterMain.php"> Chapter </a>
-<br>
+<h1> One Piece Unspoiled </h1>
+<h2> <a href="/OPDatabase/pages/chapterMain.php"> Chapter </a>
+<h2> <a href="/OPDatabase/pages/volumeMain.php"> Volume </a>
+<h2> <a href="/OPDatabase/pages/storyArcMain.php"> Story Arc </a>
 
 </body>
 </html>

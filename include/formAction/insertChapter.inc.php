@@ -34,13 +34,16 @@ try {
 		|| empty($chapter_publish_date)) {
 		$chapter_errors["empty_input"] = "Fill in required fields (Chapter Number, Chapter Title and Publish Date).";	
 	}
+
 	if (!isChapterNumberUnique($pdo, $chapter_number)) {
 		$chapter_errors["invalid_chapter_number"] = "Chapter number (" . $chapter_number . ") already exists within the database.";
 	}
+
 	if (!isChapterTitleUnique($pdo, $chapter_title)) {
 		$chapter_errors["invalid_chapter_title"] = "Chapter title (" . $chapter_title . ") already exists within the database.";
 	}
-	if (!isCoverStoryEmpty($cover_story_title)) {
+
+	if (!empty($cover_story_title)) {
 		if (!isCoverStoryTitleUnique($pdo, $cover_story_title)) {
 			$cover_story_errors["invalid_cover_story_title"] = "Cover story title (" . $cover_story_title . ") already exists within the database.";
 		}

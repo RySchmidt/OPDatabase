@@ -8,10 +8,7 @@ function addChapter(object $pdo, int $chapter_number, string $chapter_title, str
 	insertChapter($pdo, $chapter_number, $chapter_title, $chapter_publish_date, $volume_number, $story_arc_id);
 }
 
-function modifyChapter(object $pdo, int $original_chapter_number, int $chapter_number, string $chapter_title, string $chapter_publish_date, int $chapter_volume_number, int $chapter_story_arc_id) {
-	$result = getChapterFromNumber($pdo, $original_chapter_number);
-	$chapter_info_cache_id = $result["_chapter_info_cache_id"];
-
+function modifyChapter(object $pdo, int $chapter_info_cache_id, int $chapter_number, string $chapter_title, string $chapter_publish_date, int $chapter_volume_number, int $chapter_story_arc_id) {
 	updateChapter($pdo, $chapter_info_cache_id, $chapter_number, $chapter_title, $chapter_publish_date, $chapter_volume_number, $chapter_story_arc_id);
 }
 
@@ -39,7 +36,7 @@ function isChapterTitleUnique(object $pdo, string $chapter_title) {
 }	
 
 function getChapterFromInfoCacheId(object $pdo, int $chapter_info_cache_id) {
-	return selectChapterFromInfoCacheId($pdo, $chapter_info_cach_id);
+	return selectChapterFromInfoCacheId($pdo, $chapter_info_cache_id);
 }
 
 function viewInfoCacheChapter(object $pdo) {
@@ -50,6 +47,11 @@ function getAllInfoCacheChapters(object $pdo) {
 	return selectAllInfoCacheChapters($pdo);
 }
 
-function getAllChaptersCoverStories(object $pdo) {
-	return selectAllInfoCacheChaptersCoverStories($pdo);
+function getChapterInputDisplay(object $pdo) {
+	return selectChapterInputDisplay($pdo);
+}
+
+function modifyChapterVolumeNumber(object $pdo, int $volume_number, int $min_chapter_number, int $max_chapter_number) {
+	clearChapterVolumeNumber($pdo, $volume_number);
+	updateChatperVolumeNumber($pdo, $volume_number, $min_chapter_number, $max_chapter_number);	
 }

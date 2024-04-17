@@ -1,4 +1,4 @@
-function sortTable(tableId, sortItem) {
+function sortTable(tableId, sortItem, isNumber) {
 
 	var keepSorting, swap;
 	var flipSort = true;
@@ -18,25 +18,34 @@ function sortTable(tableId, sortItem) {
 
 			if (sortAssending) {
 
-				//Sort non - numbers a to z
-				if (isNaN(x)) {
+				if (x.innerHTML == "" || y.innerHTML == "") {
+					if (y.innerHTML != "") {
+						swap = true;	
+						break;
+					}
+				}
+				else if (!isNumber) {
 					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
 						swap = true;
 						break;
 					}
 				}
-
-				//Sort numbers least to greatest
 				else {
-					if (Number(x.innerHTML) > Number(y.innerHTML)) {
+					if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
 						swap = true;
 						break;
 					}
 				}
 			}
 			else {
+				if (x.innerHTML == "" || y.innerHTML == "") {
+					if (y.innerHTML != "") {
+						swap = true;	
+						break;
+					}
+				}
 				//Sort non-numbers z to a
-				if (isNaN(x)) {
+				else if (!isNumber) {
 					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
 						swap = true;
 						break;
@@ -45,7 +54,7 @@ function sortTable(tableId, sortItem) {
 
 				//Sort numbers greatest to least
 				else {
-					if (Number(x.innerHTML) < Number(y.innerHTML)) {
+					if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
 						swap = true;
 						break;
 					}

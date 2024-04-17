@@ -24,6 +24,8 @@ try {
 
 	require_once "configSession.inc.php";
 
+	unset($_SESSION["delete_chapter_data_query"]);
+
 	if ($chapter_errors) {
 		$_SESSION["delete_chapter_errors"] = $chapter_errors;
 

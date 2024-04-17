@@ -2,16 +2,17 @@ table.display {
 	width: 100%;
 }
 
-/* Table Headers */
 th.display {
+	width: 150px;
+	max-width: 300px;
 	border: 1px solid #dddddd;
 	text-align: center;
 	margin: auto;
 	padding: 8px;
 }
 
-/* Table Data */
 td.display {
+	overflow-wrap: break-word;
 	border: 1px solid #dddddd;
 	text-align: left;
 	padding: 8px;
@@ -20,3 +21,4 @@ td.display {
 tr.display:nth-child(even) {
 	background-color: #dddddd;
 }
+
