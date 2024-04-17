@@ -61,8 +61,8 @@ function volumeInputDisplay() {
 
 		if (empty($results)) {
 			echo "<div>";
-			echo "<p> <No volumes found in database.> <p>";
-			echo "<div>";
+			echo "<p> No volumes found in database. </p>";
+			echo "</div>";
 		}
 		else {
 

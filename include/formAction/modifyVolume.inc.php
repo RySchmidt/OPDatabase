@@ -32,14 +32,14 @@ try {
 	$sbs_errors = [];
 
 	if ($original_volume_number <= 0) {
-		$volume_errors["id_invalid"] = " Select a chapter to modify.";
+		$volume_errors["id_invalid"] = " Select a volume to modify.";
 	}
 	else {
 
 		if ($volume_number <= 0
 			|| empty($volume_title)
 			|| empty($volume_publish_date)) {
-			$volume_errors["empty_input"] = "Fill in required fields (Volume Number, Volume Title and Publish Date).";	
+			$volume_errors["empty_input"] = "Required fields (Volume Number, Volume Title and Publish Date) cannot be empty.";	
 		}
 
 		if ($min_chapter_number <= 0 xor $max_chapter_number <= 0) {

@@ -13,7 +13,7 @@ function hiddenStoryArcField(string $query_data, string $query_name, string $nam
 }
 
 function storyArcField(string $query_data, string $query_name, string $type, string $error_data = "", string $error = "") {
-	if (isset($_SESSION[$query_data . "_query_data"][$query_name]) && !isset($_SESSION[$error_data . "_story_arc_errors"][$error])) {
+	if (isset($_SESSION[$query_data . "_query_data"][$query_name]) && !isset($_SESSION[$error_data . "_errors"][$error])) {
 		echo "<input type='" . $type . "' name='" . $query_name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
 	else {	
@@ -28,15 +28,15 @@ function storyArcSelection(string $query_data, string $query_name) {
 
 	try {
 		require "dbh.inc.php";
-		$results = getStoryArc($pdo);
+		$results = getAllAdvancedStoryArc($pdo);
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["id"]) {
-					echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> " . htmlspecialchars($result["title"]) . " </option>";	
+				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["story_arc_id"]) {
+					echo "<option value='" . htmlspecialchars((string)$result["story_arc_id"]) . "' selected> " . htmlspecialchars($result["story_arc_title"]) . " </option>";	
 				}			
 				else {
-					echo "<option value='" . htmlspecialchars((string)$result["id"]) . "'> " . htmlspecialchars($result["title"]) . " </option>";
+					echo "<option value='" . htmlspecialchars((string)$result["story_arc_id"]) . "'> " . htmlspecialchars($result["story_arc_title"]) . " </option>";
 				}
 			}
 		}
@@ -64,8 +64,8 @@ function storyArcsInputDisplay() {
 
 		if (empty($results)) {
 			echo "<div>";
-			echo "<p> <No chapters found in database.> <p>";
-			echo "<div>";
+			echo "<p> No chapters found in database. </p>";
+			echo "</div>";
 		}
 		else {
 
@@ -75,8 +75,8 @@ function storyArcsInputDisplay() {
 			echo "<tr>";
 			echo "<th class='display' onclick=\"sortTable('chapterTable', 0, false)\"> Story Arc </th>";
 			echo "<th class='display' onclick=\"sortTable('chapterTable', 1, false)\"> Parent Story Arc </th>";
-			echo "<th class='display' onclick=\"sortTable('chapterTable', 2, false)\"> Min Chapter </th>";
-			echo "<th class='display' onclick=\"sortTable('chapterTable', 3, false)\"> Max Chapter Arc </th>";
+			echo "<th class='display' onclick=\"sortTable('chapterTable', 2, true)\"> Min Chapter </th>";
+			echo "<th class='display' onclick=\"sortTable('chapterTable', 3, true)\"> Max Chapter Arc </th>";
 			echo "</tr>";
 			echo "</thead>";
 
@@ -85,7 +85,7 @@ function storyArcsInputDisplay() {
 			foreach ($results as $result) { 
 				echo "<tr>"; 
 				echo "<td class='display'>" . htmlspecialchars((string)$result["story_arc_title"]) . "</td>";
-				echo "<td class='display'>" . htmlspecialchars((string)$result["_parent_story_arc"]) . "</td>";
+				echo "<td class='display'>" . htmlspecialchars((string)$result["parent_arc_title"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["min_chapter"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["max_chapter"]) . "</td>";
 				echo "</tr>";

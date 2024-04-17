@@ -9,12 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 	die();
 }
 
-$volume_number = intval($_POST["volume_number"]);
-$volume_title = $_POST["volume_title"];
-$volume_publish_date = $_POST["volume_publish_date"];
+$story_arc_title = $_POST["volume_title"];
+$parent_story_arc_id = intval($_POST["parent_story_arc_id"]);
 $min_chapter_number = intval($_POST["min_chapter_number"]);
 $max_chapter_number = intval($_POST["max_chapter_number"]);
-$sbs_number = intval($_POST["sbs_number"]);
 
 try {
 
@@ -36,7 +34,7 @@ try {
 
 	}
 	else if ($min_chapter_number > $max_chapter_number) {
-		$volume_errors["ivalid_chapter_range"] = "Chapter range (" . $min_chapter_number . " to " . $max_chapter_number . ") is invalid. Enter the chapter range in the form of 'min' to 'max'.";
+		$volume_errors["invalid_chapter_range"] = "Chapter range (" . $min_chapter_number . " to " . $max_chapter_number . ") is invalid. Enter the chapter range in the form of 'min' to 'max'.";
 	}
 
 	if (!isVolumeNumberUnique($pdo, $volume_number)) {

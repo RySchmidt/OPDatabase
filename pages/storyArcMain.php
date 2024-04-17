@@ -3,6 +3,7 @@
 
 <?php 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/OPDatabase/config.php";
+require_once "configSession.inc.php";
 require_once "storyArc/storyArcView.inc.php";
 require_once "chapter/chapterView.inc.php";
 ?>
@@ -34,13 +35,13 @@ require_once "chapter/chapterView.inc.php";
 <td class="form"> <label name="story_arc_title"> Story Arc Title: </label> </td>
 <td class="form">
 <?php
-storyArcField("insert", "story_Arc_title", "text", "story_Arc", "invalid_storyArc_title");
+storyArcField("insert", "story_arc_title", "text", "story_arc", "invalid_story_arc_title");
 ?>
 </td>
 </tr>
 
 <tr class="form">
-<td class="form"> <label name="story_arc_id"> Parent Story Arc: </label> </td>
+<td class="form"> <label name="parent_story_arc_id"> Parent Story Arc: </label> </td>
 <td class="form">
 <?php
 storyArcSelection("insert", "parent_story_arc_id");
@@ -74,7 +75,7 @@ chapterSelection("insert", "max_chapter_number");
 <div class="formsColumn">
 
 <table class="form">
-<form action="" method="POST">
+<form action="/OPDatabase/include/formAction/populateStoryArcModifyForm.inc.php" method="POST">
 
 <thead>
 <tr>
@@ -86,7 +87,7 @@ chapterSelection("insert", "max_chapter_number");
 <td class="form"> <label name="story_arc_id"> Story Arc: </label> </td>
 <td class="form">
 <?php
-storyArcSelection("insert", "story_arc_id");
+storyArcSelection("modify", "story_arc_id");
 ?>
 </td>
 </tr>
@@ -101,20 +102,23 @@ storyArcSelection("insert", "story_arc_id");
 <br>
 
 <table class="form">
-<form action="/OPDatabase/include/formAction/modifyVolume.inc.php" method="POST">
+<form action="/OPDatabase/include/formAction/modifyStoryArc.inc.php" method="POST">
 
+<?php
+hiddenStoryArcField("modify", "story_arc_id", "story_arc_id", "-1");
+?>
 
 <tr class="form">
 <td class="form"> <label name="story_arc_title"> Story Arc Title: </label> </td>
 <td class="form">
 <?php
-storyArcField("modify", "story_Arc_title", "text", "story_Arc", "invalid_storyArc_title");
+storyArcField("modify", "story_arc_title", "text", "story_arc", "invalid_story_arc_title");
 ?>
 </td>
 </tr>
 
 <tr class="form">
-<td class="form"> <label name="story_arc_id"> Parent Story Arc: </label> </td>
+<td class="form"> <label name="parent_story_arc_id"> Parent Story Arc: </label> </td>
 <td class="form">
 <?php
 storyArcSelection("modify", "parent_story_arc_id");
@@ -131,7 +135,7 @@ chapterSelection("modify", "min_chapter_number");
 ?>
 <br> to <br>
 <?php
-chapterSelection("insert", "max_chapter_number");
+chapterSelection("modify", "max_chapter_number");
 ?>
 </td>
 </tr>
@@ -152,7 +156,7 @@ chapterSelection("insert", "max_chapter_number");
 <div class="formsColumn">
 
 <table class="form">
-<form action="" method="POST">
+<form action="/OPDatabase/include/formAction/deleteStoryArc.inc.php" method="POST">
 
 <thead>
 <tr>
@@ -183,7 +187,11 @@ storyArcSelection("delete", "story_arc_id");
 </div>
 <div>
 <?php
+checkStoryArcErrors("insert");
 
+checkStoryArcErrors("modify");
+
+checkStoryArcErrors("delete");
 ?>
 </div>
 
