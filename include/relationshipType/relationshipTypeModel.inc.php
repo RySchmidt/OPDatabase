@@ -1,139 +1,91 @@
 <?php declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 
-function insertChapter(object $pdo, int $chapter_number, string $chapter_title, string $publish_date, int $volume_number, int $story_arc_id) {
-
-	if ($volume_number <= 0) {
-		$volume_number = null;	
+function insertRelationshipType(object $pdo, string $relationship_type_name, int $inverse_relationship_type_id) {
+	if ($inverse_relationship_type_id <= 0) {
+		$inverse_relationship_type_id = null;
 	}
-
-	if ($story_arc_id <= 0) {
-		$story_arc_id = null;	
-	}
-
 
 	$query = "INSERT 
-		INTO _info_cache (publish_date) 
-		VALUES (:publish_date);";
+		INTO _relationship_type (name, _relationship_type_inverse) 
+		VALUES (:relationship_type_name, :inverse_relationship_type_id);";
 
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":publish_date", $publish_date);
-
-	$stmt->execute();
-
-	$info_cache_id = $pdo->lastInsertId("id");
-
-	$query = "INSERT 
-		INTO _chapter (number, title, _info_cache_id, _volume_number, _story_arc_id) 
-		VALUES (:chapter_number, :title, :info_cache_id, :volume_number, :story_arc_id);";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":chapter_number", $chapter_number);
-	$stmt->bindParam(":title", $chapter_title);
-	$stmt->bindParam(":info_cache_id", $info_cache_id);
-	$stmt->bindParam(":volume_number", $volume_number);
-	$stmt->bindParam(":story_arc_id", $story_arc_id);	
+	$stmt->bindParam(":relationship_type_name", $relationship_type_name);
+	$stmt->bindParam(":inverse_relationship_type_id", $inverse_relationship_type_id);
 
 	$stmt->execute();
 }
 
-function updateChapter(object $pdo, int $chapter_info_cache_id, int $chapter_number, string $chapter_title, string $publish_date, int $volume_number, int $story_arc_id) {
-	if ($volume_number <= 0) {
-		$volume_number = null;	
-	}
+function updateRelationshipType(object $pdo, int $relationship_type_id, string $relationship_type_name, int $inverse_relationship_type_id) {
 
-	if ($story_arc_id <= 0) {
-		$story_arc_id = null;	
-	}
+	$query = "UPDATE _relationship_type
+		SET _relationship_type.name = :relationship_type_name, _relationship_type._relationship_type_inverse = :inverse_relationship_type_id
+		WHERE _relationship_type.id = :relationship_type_id;";
 
-
-	$query = "UPDATE _info_cache
-		SET _info_cache.publish_date = :publish_date
-		WHERE _info_cache.id = :info_cache_id;";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":publish_date", $publish_date);
-	$stmt->bindParam(":info_cache_id", $chapter_info_cach_id);
-
-	$stmt->execute();
-
-	$query = "UPDATE _chapter
-		SET _chapter.number = :chapter_number, _chapter.title = :chapter_title, _chapter._volume_number = :volume_number, _chapter._story_arc_id = :story_arc_id
-		WHERE _chapter._info_cache_id = :chapter_info_cache_id;";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":chapter_number", $chapter_number);
-	$stmt->bindParam(":chapter_title", $chapter_title);
-	$stmt->bindParam(":volume_number", $volume_number);
-	$stmt->bindParam(":story_arc_id", $story_arc_id);	
-	$stmt->bindParam(":chapter_info_cache_id", $chapter_info_cache_id);
-
-	$stmt->execute();
-
-}
-
-function deleteChapter(object $pdo, int $chapter_number) {
-	$result = selectChapterFromNumber($pdo, $chapter_number);
-	$info_cache_id = $result["_chapter_info_cache_id"];
-
-	$query = "DELETE 
-		FROM _info_cache
-		WHERE _info_cache.id = :info_cache_id;";
-
-	$stmt = $pdo->prepare($query);
-
-	$stmt->bindParam(":info_cache_id", $info_cache_id);
+	$stmt = $pdo->prepare($query);	
+	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
+	$stmt->bindParam(":relationship_type_name", $relationship_type_name);
+	$stmt->bindParam(":inverse_relationship_type_id", $inverse_relationship_type_id);
 
 	$stmt->execute();
 }
 
-function selectChapterFromNumber(object $pdo, int $number) {
-	updateViewInfoCacheChapter($pdo);
+function deleteRelationshipType(object $pdo, int $relationship_type_id) {
+
+	$query = "DELETE
+		FROM _relationship_type 
+		WHERE _relationship_type.id = :relationship_type_id;";
+
+	$stmt = $pdo->prepare($query);
+	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
+
+	$stmt->execute();
+}
+
+function selectRelationshipTypeFromId(object $pdo, int $relationship_type_id) {
 	$query = "SELECT *
-		FROM _info_cache_chapter
-		WHERE _info_cache_chapter.chapter_number = :number;";
+		FROM _relationship_type 
+		WHERE _relationship_type.id = :relationship_type_id;";
 
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":number", $number);
+	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
 
 	$stmt->execute();
-
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 	return $results;
 }
 
-function selectChapterFromTitle(object $pdo, string $title) {
-	updateViewInfoCacheChapter($pdo);
+function selectRelationshipTypeFromInverseId(object $pdo, int $inverse_relationship_type) {
 	$query = "SELECT *
-		FROM _info_cache_chapter
-		WHERE _info_cache_chapter.chapter_title = :title;";
+		FROM _relationship_type 
+		WHERE _relationship_type._relationship_type_inverse = :inverse_relationship_type;";
 
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":title", $title);
+	$stmt->bindParam(":inverse_relationship_type", $inverse_relationship_type);
 
 	$stmt->execute();
-
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 	return $results;
 }
 
-function updateViewInfoCacheChapter(object $pdo) {
-	$query = "CREATE OR REPLACE VIEW _info_cache_chapter AS
-		SELECT _chapter._info_cache_id AS _chapter_info_cache_id, _info_cache.publish_date, _volume_number, _chapter.number as chapter_number, _chapter.title AS chapter_title, _chapter._story_arc_id AS _chapter_story_arc_id
-		FROM _info_cache
-		INNER JOIN _chapter
-		ON _info_cache.id = _chapter._info_cache_id
-		ORDER BY chapter_number ASC;";
+function selectRelationshipTypeFromName(object $pdo, string $relationship_type_name) {
+	$query = "SELECT *
+		FROM _relationship_type
+		WHERE _relationship_type.name = :relationship_type_name;";
 
 	$stmt = $pdo->prepare($query);
+	$stmt->bindParam(":relationship_type_name", $relationship_type_name);
 
 	$stmt->execute();
-}
+	$results = $stmt->fetch(PDO::FETCH_ASSOC);
+	return $results;
+}	
 
-function selectAllInfoCacheChapters(object $pdo) {
-	updateViewInfoCacheChapter($pdo);
+function selectRelationshipType(object $pdo) {
 	$query = "SELECT *
-		FROM _info_cache_chapter;";
+		FROM _relationship_type
+		ORDER BY _relationship_type.name ASC;";
 
 	$stmt = $pdo->prepare($query);
 
@@ -142,37 +94,12 @@ function selectAllInfoCacheChapters(object $pdo) {
 	return $results;
 }
 
-function selectChapterFromInfoCacheId(object $pdo, int $info_cache_id) {
-	updateViewInfoCacheChapter($pdo);
+function selectAdvancedRelationshipType(object $pdo) {
+	updateAdvancedRelationshipType($pdo);
+
 	$query = "SELECT *
-		FROM _info_cache_chapter
-		WHERE _info_cache_chapter._chapter_info_cache_id = :info_cache_id;";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":info_cache_id", $info_cache_id);
-
-	$stmt->execute();
-
-	$results = $stmt->fetch(PDO::FETCH_ASSOC);
-	return $results;
-}
-
-function selectChapterInputDisplay(object $pdo) {
-	updateViewInfoCacheChapter($pdo);	
-	viewInfoCacheCoverStory($pdo);
-	viewAdvancedStoryArc($pdo);
-
-	$query = "SELECT T1.*, T2._cover_story_arc_id, T2._cover_story_arc_title, T2._cover_story_arc_parent, T2._cover_story_arc_parent_title
-		FROM (SELECT _info_cache_chapter.*, _advanced_story_arc.story_arc_id, _advanced_story_arc.story_arc_title, _advanced_story_arc.parent_arc_id, _advanced_story_arc.parent_arc_title FROM _info_cache_chapter
-		LEFT JOIN _advanced_story_arc
-		ON _info_cache_chapter._chapter_story_arc_id = _advanced_story_arc.story_arc_id) AS T1
-		LEFT JOIN 
-		(SELECT _info_cache_cover_story.*, _advanced_story_arc.story_arc_title AS _cover_story_arc_title, _advanced_story_arc.parent_arc_id AS _cover_story_arc_parent, _advanced_story_arc.parent_arc_title AS _cover_story_arc_parent_title
-		FROM _info_cache_cover_story
-		LEFT JOIN _advanced_story_arc
-		ON _info_cache_cover_story._cover_story_arc_id = _advanced_story_arc.story_arc_id) AS T2
-		ON T1.chapter_number = T2._chapter_number  
-		ORDER BY T1.chapter_number ASC;";
+		FROM _advanced_relationship_type
+		ORDER BY _advanced_relationship_type.relationship_type_name ASC;";
 
 	$stmt = $pdo->prepare($query);
 
@@ -181,69 +108,30 @@ function selectChapterInputDisplay(object $pdo) {
 	return $results;
 }
 
-function clearChapterVolumeNumber($pdo, $volume_number) {	
-	$query = "UPDATE _chapter
-		SET _chapter._volume_number = NULL
-		WHERE _chapter._volume_number = :volume_number";
-
+function updateAdvancedRelationshipType(object $pdo) {
+	$query = "CREATE OR REPLACE VIEW _advanced_relationship_type AS 
+		SELECT T1.id AS relationship_type_id, T1.name AS relationship_type_name, T2.name AS inverse_relationship_name
+		FROM _relationship_type AS T1
+		LEFT JOIN _relationship_type AS T2
+		ON T1._relationship_type_inverse = T2.id;";
+	
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":volume_number", $volume_number);
 
 	$stmt->execute();
 }
 
-function updateChapterVolumeNumber($pdo, $volume_number, $min_chapter_number, $max_chapter_number) {
-	$query = "UPDATE _chapter
-		SET _chapter._volume_number = :volume_number
-		WHERE _chapter.number >= :min_chapter_number AND _chapter.number <= :max_chapter_number";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":volume_number", $volume_number);
-	$stmt->bindParam(":min_chapter_number", $min_chapter_number);
-	$stmt->bindParam(":max_chapter_number", $max_chapter_number);
-
-	$stmt->execute();
-}
-/*
-SELECT * 
-FROM _story_arc 
-WHERE _story_arc.id IN (SELECT _story_arc.id
-          FROM _story_arc
-          WHERE _story_arc._story_arc_parent = 1);
- */
-
-function clearChapterStoryArc(object $pdo, int $story_arc_id, int $parent_story_arc_id) {
-	if ($parent_story_arc_id <= 0) {
-		$parent_story_arc_id = null;	
+function updateRelationshipTypeInverse(object $pdo, int $relationship_type_id, int $inverse_relationship_type_id) {	
+	if ($inverse_relationship_type_id <= 0) {
+		$inverse_relationship_type_id = null;
 	}
 
-	$query = "UPDATE _chapter
-		SET _chapter._story_arc_id = :parent_story_arc_id
-		WHERE _chapter._story_arc_id = :story_arc_id;";
+	$query = "UPDATE _relationship_type
+		SET _relationship_type._relationship_type_inverse = :inverse_relationship_type_id
+		WHERE _relationship_type.id = :relationship_type_id;";
 
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":story_arc_id", $story_arc_id);
-	$stmt->bindParam(":parent_story_arc_id", $parent_story_arc_id);
-
-	$stmt->execute();
-}
-
-function updateChapterStoryArc(object $pdo, int $story_arc_id, int $parent_story_arc_id, int $min_chapter_number, int $max_chapter_number) {
-	if ($parent_story_arc_id <= 0) {
-		$parent_story_arc_id = null;	
-	}
-	$query = "UPDATE _chapter
-		SET _chapter._story_arc_id = :story_arc_id
-		WHERE _chapter.number >= :min_chapter_number AND _chapter.number <= :max_chapter_number AND _chapter._story_arc_id NOT IN (
-		SELECT _story_arc.id
-          	FROM _story_arc
-         	WHERE _story_arc._story_arc_parent = :parent_story_arc_id);";
-
-	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":story_arc_id", $story_arc_id);
-	$stmt->bindParam(":parent_story_arc_id", $parent_story_arc_id);
-	$stmt->bindParam(":min_chapter_number", $min_chapter_number);
-	$stmt->bindParam(":max_chapter_number", $max_chapter_number);
+	$stmt = $pdo->prepare($query);	
+	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
+	$stmt->bindParam(":inverse_relationship_type_id", $inverse_relationship_type_id);
 
 	$stmt->execute();
 }
