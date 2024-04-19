@@ -29,6 +29,7 @@ require_once "coverStory/coverStoryContr.inc.php";
 <form action="/OPDatabase/include/formAction/insertChapter.inc.php" method="POST">
 
 <thead>
+<tr>
 <th class="form" colspan="2"> <h2> Insert Chapter/Cover Story </h2> <th>
 </tr>
 </thead>
@@ -38,16 +39,16 @@ require_once "coverStory/coverStoryContr.inc.php";
 <td class="form"> <label name="chapter_number"> Chapter Number: </label> </td>
 <td class="form">
 <?php
-chapterField("insert", "chapter_number", "number", "chapter", "invalid_chapter_number");
+chapterField("insert", "chapter_number", "number", "insert", "invalid_chapter_number");
 ?>
 </td>
 </tr>
 
 <tr class="form">
-<td class="form"> <label name="chapter_title"> chapter title: </label> </td>
+<td class="form"> <label name="chapter_title"> Chapter title: </label> </td>
 <td class="form">
 <?php
-chapterfield("insert", "chapter_title", "text", "chapter", "invalid_chapter_title");
+chapterfield("insert", "chapter_title", "text", "insert", "invalid_chapter_title");
 ?>
 </td>
 </tr>
@@ -83,7 +84,7 @@ storyArcSelection("insert", "chapter_story_arc_id");
 <td class="form"> <label name="cover_story_title"> Cover Story Title: </label> </td>
 <td class="form">
 <?php
-coverStoryField("insert", "cover_story_title", "text", "cover_story", "invalid_cover_story_title");
+coverStoryField("insert", "cover_story_title", "text", "insert", "invalid_cover_story_title");
 ?>
 </td>
 </tr>
@@ -195,7 +196,7 @@ storyArcSelection("modify", "chapter_story_arc_id");
 <td class="form"> <label name="cover_story_title"> Cover Story Title: </label> </td>
 <td class="form">
 <?php
-coverStoryField("modify", "cover_story_title", "text", "invalid_cover_story_title");
+coverStoryField("modify", "cover_story_title", "text", "modify", "invalid_cover_story_title");
 ?>
 </td>
 </tr>

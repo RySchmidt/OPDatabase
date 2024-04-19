@@ -12,3 +12,6 @@ Struggles
 	Building the website to be easily expandable
 	Discovering how to get the differt web site pages to comunicate with each other
 	Optimizing my code for when I expanded it later
+
+BUG TO FIX
+Modifying information caches that already have other data attached to them.

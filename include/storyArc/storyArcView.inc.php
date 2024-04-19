@@ -23,7 +23,7 @@ function storyArcField(string $query_data, string $query_name, string $type, str
 
 function storyArcSelection(string $query_data, string $query_name) {
 
-	echo "<select name='". $query_name ."'>";
+	echo "<select class='form' name='". $query_name ."'>";
 	echo "<option value='-1'> No Story Arc </option>";
 
 	try {

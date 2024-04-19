@@ -22,7 +22,7 @@ function volumeField(string $query_data, string $query_name, string $type, strin
 }
 
 function volumeSelection(string $query_data, string $query_name) {
-	echo "<select name='". $query_name . "'>";
+	echo "<select class='form' name='". $query_name . "'>";
 	echo "<option value='-1'> No Volume </option>";
 
 	try {

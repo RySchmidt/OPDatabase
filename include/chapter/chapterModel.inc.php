@@ -1,5 +1,4 @@
-<?php declare(strict_types=1);
-require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
+<?php declare(strict_types=1); require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 
 function insertChapter(object $pdo, int $chapter_number, string $chapter_title, string $publish_date, int $volume_number, int $story_arc_id) {
 
