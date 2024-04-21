@@ -7,8 +7,8 @@ function addEpithet(object $pdo, string $epithet, int $character_id, int $info_c
 	insertEpithet($pdo, $epithet, $character_id, $info_cache_id);
 }
 
-function modifyEpithet(object $pdo, string $original_epithet, string $epithet, int $character_id, int $info_cache_id) {
-	updateEpithet($pdo, $original_epithet, $epithet, $character_id, $info_cache_id);
+function modifyEpithet(object $pdo, string $original_epithet, string $epithet, int $character_id, int $original_info_cache, int $info_cache_id) {
+	updateEpithet($pdo, $original_epithet, $epithet, $character_id, $original_info_cache, $info_cache_id);
 }
 
 function removeEpithet(object $pdo, string $epithet, int $character_id, int $info_cache_id) {
@@ -24,4 +24,8 @@ function isEpithetUnique(object $pdo, string $epithet, int $character_id, int $i
 
 function getEpithetFromCharacterId(object $pdo, int $character_id) {
 	return selectEpithetFromCharacterId($pdo, $character_id);
+}
+
+function getEpithetDisplayFromCharacterId(object $pdo, int $character_id) {
+	return selectAdvancedEpithetFromCharacterId($pdo, $character_id);
 }

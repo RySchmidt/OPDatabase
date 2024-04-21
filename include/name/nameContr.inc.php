@@ -7,8 +7,8 @@ function addName(object $pdo, string $name, int $character_id, int $info_cache_i
 	insertName($pdo, $name, $character_id, $info_cache_id);
 }
 
-function modifyName(object $pdo, string $original_name, string $name, int $character_id, int $info_cache_id) {
-	updateName($pdo, $original_name, $name, $character_id, $info_cache_id);
+function modifyName(object $pdo, string $original_name, string $name, int $character_id, int $original_info_cache_id, int $info_cache_id) {
+	updateName($pdo, $original_name, $name, $character_id, $original_info_cache_id, $info_cache_id);
 }
 
 function removeName(object $pdo, string $name, int $character_id, int $info_cache_id) {
@@ -24,4 +24,8 @@ function isNameUnique(object $pdo, string $name, int $character_id, int $info_ca
 
 function getNameFromCharacterId(object $pdo, int $character_id) {
 	return selectNameFromCharacterId($pdo, $character_id);
+}
+
+function getNameDisplayFromCharacterId(object $pdo, int $character_id) {
+	return selectAdvancedNameFromCharacterId($pdo, $character_id);
 }

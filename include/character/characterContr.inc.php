@@ -22,3 +22,7 @@ function getCharacterSelection(object $pdo) {
 function getCharacterFromId(object $pdo, int $character_id) {
 	return selectCharacterFromId($pdo, $character_id);
 }
+
+function getCharacterDisplay(object $pdo) {
+
+}

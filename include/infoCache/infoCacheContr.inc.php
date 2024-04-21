@@ -15,3 +15,11 @@ function getRestrictedInfoCacheSelection(object $pdo, int $min_info_cache_id = -
 	return selectRestrictedInfoCacheSelection($pdo, $min_info_cache_id, $max_info_cache_id);
 }
 
+function isCacheRestricted(object $pdo, int $info_cache_id, int $min_info_cache_id = -1, int $max_info_cache_id = -1) {
+	if (!(selectRestrictedInfoCacheSelection($pdo, $info_cache_id, $min_info_cache_id)
+		|| selectRestrictedInfoCacheSelection($pdo, $max_info_cache_id, $info_cache_id))) {
+		return false;
+	}
+	return true;
+}
+

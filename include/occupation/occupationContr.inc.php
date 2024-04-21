@@ -14,17 +14,25 @@ function removeOccupation(object $pdo, int $occupation_type_id, int $character_i
 	deleteOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal);
 }
 
-function isUniqueOccupation(object $pdo, int $occupation_type_id, int $character_id, int $organization_id, int $info_cache_reveal, int $info_cache_invalid) {
-	if (getOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal)) {
+function isUniqueOccupation(object $pdo, int $occupation_type_id, int $character_id, int $organization_id, int $info_cache_reveal) {
+	if (selectOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal)) {
 		return true;
 	}
 	return false;	
+}
+
+function getOccupation(object $pdo, int $occupation_type_id, int $character_id, int $organization_id, int $info_cache_reveal) {
+	selectOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal);
 }
 
 function getAllOccupation(object $pdo) {
 	return selectAllOccupation($pdo);
 }
 
-function getOccupationFromCharacterId(object $pdo, int $character_id) {
-	return selectOccupationFromCharacterId($pdo, $character_id);
+function getAdvancedOccupationFromCharacterId(object $pdo, int $character_id) {
+	return selectAdvancedOccupationFromCharacterId($pdo, $character_id);
+}
+
+function getOccupationDisplayFromCharacterId(object $pdo, int $character_id) {
+	return selectAdvancedOccupationFromCharacterId($pdo, $character_id);
 }

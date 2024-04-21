@@ -9,8 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 	die();
 }
 
-$story_arc_title = $_POST["volume_title"];
-$parent_story_arc_id = intval($_POST["parent_story_arc_id"]);
+$volume_number = intval($_POST["volume_number"]);
+$volume_title = $_POST["volume_title"];
+$sbs_number = intval($_POST["sbs_number"]);
+$volume_publish_date = $_POST["volume_publish_date"];
 $min_chapter_number = intval($_POST["min_chapter_number"]);
 $max_chapter_number = intval($_POST["max_chapter_number"]);
 

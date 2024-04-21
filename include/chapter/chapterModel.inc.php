@@ -45,14 +45,13 @@ function updateChapter(object $pdo, int $chapter_info_cache_id, int $chapter_num
 		$story_arc_id = null;	
 	}
 
-
 	$query = "UPDATE _info_cache
 		SET _info_cache.publish_date = :publish_date
 		WHERE _info_cache.id = :info_cache_id;";
 
 	$stmt = $pdo->prepare($query);
 	$stmt->bindParam(":publish_date", $publish_date);
-	$stmt->bindParam(":info_cache_id", $chapter_info_cach_id);
+	$stmt->bindParam(":info_cache_id", $chapter_info_cache_id);
 
 	$stmt->execute();
 
@@ -68,7 +67,7 @@ function updateChapter(object $pdo, int $chapter_info_cache_id, int $chapter_num
 	$stmt->bindParam(":chapter_info_cache_id", $chapter_info_cache_id);
 
 	$stmt->execute();
-
+	
 }
 
 function deleteChapter(object $pdo, int $chapter_number) {
@@ -203,13 +202,6 @@ function updateChapterVolumeNumber($pdo, $volume_number, $min_chapter_number, $m
 
 	$stmt->execute();
 }
-/*
-SELECT * 
-FROM _story_arc 
-WHERE _story_arc.id IN (SELECT _story_arc.id
-          FROM _story_arc
-          WHERE _story_arc._story_arc_parent = 1);
- */
 
 function clearChapterStoryArc(object $pdo, int $story_arc_id, int $parent_story_arc_id) {
 	if ($parent_story_arc_id <= 0) {

@@ -90,7 +90,7 @@ function chapterInputDisplay() {
 				echo "<td class='display'>" . htmlspecialchars((string)$result["_volume_number"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["chapter_number"]) . "</td>";
 				echo "<td class='display'>" . htmlspecialchars((string)$result["chapter_title"]) . "</td>";
-				if (!empty($result["_parent_story_arc"])) {
+				if (!empty($result["parent_arc_id"])) {
 					echo "<td class='display'>" . htmlspecialchars((string)$result["parent_arc_title"]) . "</td>";
 					echo "<td class='display'>" . htmlspecialchars((string)$result["story_arc_title"]) . "</td>";
 				}

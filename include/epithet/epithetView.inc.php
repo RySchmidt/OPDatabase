@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . "/OPDatabase/config.php";
 
-function hiddenNameField(string $query_data, string $query_name, string $name, string $default_value = "") {
+function hiddenEpithetField(string $query_data, string $query_name, string $name, string $default_value = "") {
 	if (isset($_SESSION[$query_data . "_query_data"][$query_name])) {
 		echo "<input type='hidden' name='" . $name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
@@ -11,7 +11,7 @@ function hiddenNameField(string $query_data, string $query_name, string $name, s
 	}
 }
 
-function nameField(string $query_data, string $query_name, string $type, string $error_data = "", string $error = "") {
+function epithetField(string $query_data, string $query_name, string $type, string $error_data = "", string $error = "") {
 	if (isset($_SESSION[$query_data . "_query_data"][$query_name]) && !isset($_SESSION[$error_data . "_name_errors"][$error])) {
 		echo "<input type='" . $type . "' name='" . $query_name . "' value='" . $_SESSION[$query_data . "_query_data"][$query_name] . "'>";
 	}
@@ -20,32 +20,22 @@ function nameField(string $query_data, string $query_name, string $type, string 
 	}
 }
 
-/*
-function nameSelection(string $query_data, string $query_name) {
+
+function epithetSelection(string $query_data, string $query_name, string $character_name) {
 	echo "<select class='form' name='" . $query_name . "'>";
-	echo "<option value='-1'> Select Name </option>";
+	echo "<option value='-1'> Select Epithet </option>";
 
 	try {
 		require "dbh.inc.php";
-		//$results = getAllNameSelection($pdo);
+		$results = getEpithetFromCharacterId($pdo, intval($_SESSION[$query_data . "_query_data"][$character_name]));
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["id"]) {
-					if (empty($result["name"])) {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> UNKNOWN - " . htmlspecialchars($result["note"]) . " </option>";	
-					}
-					else {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> " . htmlspecialchars($result["name"]) . " </option>";	
-					}
+				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["epithet"]) {	
+						echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&epithet=" . htmlspecialchars((string)$result["epithet"]) . "' selected> " . htmlspecialchars($result["epithet"]) . " </option>";	
 				}			
 				else {
-					if (empty($result["name"])) {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> UNKNOWN - " . htmlspecialchars($result["note"]) . " </option>";	
-					}
-					else {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> " . htmlspecialchars($result["name"]) . " </option>";	
-					}
+						echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&epithet=" . htmlspecialchars((string)$result["epithet"]) . "'> " . htmlspecialchars($result["epithet"]) . " </option>";	
 				}
 			}
 		}
@@ -57,7 +47,6 @@ function nameSelection(string $query_data, string $query_name) {
 
 	echo "</select>";
 }
- */
 
 function checkEpithetErrors(string $name) {
 	if (isset($_SESSION[$name . "_epithet_errors"])) {

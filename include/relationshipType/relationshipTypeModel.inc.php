@@ -108,6 +108,20 @@ function selectAdvancedRelationshipType(object $pdo) {
 	return $results;
 }
 
+function selectRelationshipInverseFromId($pdo, $relationship_type_id) {
+	updateAdvancedRelationshipType($pdo);
+
+	$query = "SELECT *
+		FROM _relationship_type
+		WHERE _relationship_type._relationship_type_inverse = :relationship_type_id;";
+
+	$stmt = $pdo->prepare($query);
+
+	$stmt->execute();
+	$results = $stmt->fetch(PDO::FETCH_ASSOC);
+	return $results;
+}
+
 function updateAdvancedRelationshipType(object $pdo) {
 	$query = "CREATE OR REPLACE VIEW _advanced_relationship_type AS 
 		SELECT T1.id AS relationship_type_id, T1.name AS relationship_type_name, T2.name AS inverse_relationship_name

@@ -20,32 +20,21 @@ function nameField(string $query_data, string $query_name, string $type, string 
 	}
 }
 
-/*
-function nameSelection(string $query_data, string $query_name) {
+function nameSelection(string $query_data, string $query_name, string $character_name) {
 	echo "<select class='form' name='" . $query_name . "'>";
 	echo "<option value='-1'> Select Name </option>";
 
 	try {
 		require "dbh.inc.php";
-		//$results = getAllNameSelection($pdo);
+		$results = getNameFromCharacterId($pdo, intval($_SESSION[$query_data . "_query_data"][$character_name]));
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["id"]) {
-					if (empty($result["name"])) {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> UNKNOWN - " . htmlspecialchars($result["note"]) . " </option>";	
-					}
-					else {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> " . htmlspecialchars($result["name"]) . " </option>";	
-					}
+				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["name"]) {	
+						echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&name=" . htmlspecialchars((string)$result["name"]) . "' selected> " . htmlspecialchars($result["name"]) . " </option>";	
 				}			
 				else {
-					if (empty($result["name"])) {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> UNKNOWN - " . htmlspecialchars($result["note"]) . " </option>";	
-					}
-					else {
-						echo "<option value='" . htmlspecialchars((string)$result["id"]) . "' selected> " . htmlspecialchars($result["name"]) . " </option>";	
-					}
+						echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&name=" . htmlspecialchars((string)$result["name"]) . "'> " . htmlspecialchars($result["name"]) . " </option>";	
 				}
 			}
 		}
@@ -57,7 +46,6 @@ function nameSelection(string $query_data, string $query_name) {
 
 	echo "</select>";
 }
- */
 
 function checkNameErrors(string $name) {
 	if (isset($_SESSION[$name . "_name_errors"])) {

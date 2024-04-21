@@ -170,10 +170,10 @@ characterSelection("modify", "character_id");
 
 <tbody>
 <tr class="form">
-<td class="form"> <label name="info_cache_id"> Introduced In: </label> </td>
+<td class="form"> <label name="info_cache_id_reveal"> Introduced In: </label> </td>
 <td class="form">
 <?php
-infoCacheSelection("insert", "info_cache_id");
+infoCacheSelection("modify", "info_cache_id_reveal");
 ?>
 </td>
 </tr>
@@ -193,6 +193,12 @@ infoCacheSelection("insert", "info_cache_id");
 
 <?php
 informationModifyDisplay("modify");
+?>
+
+<br>
+
+<?php
+informationModify("modify");
 ?>
 
 </div>
@@ -277,15 +283,15 @@ informationModifyDisplay("delete");
 
 <div>
 <?php
-
-?>
-</div>
-
-<div>
-<?php
 checkCharacterErrors("insert");
 checkCharacterErrors("modify");
 checkCharacterErrors("delete");
+?>
+
+</div>
+<div>
+<?php
+characterInputDisplay();
 ?>
 </div>
 

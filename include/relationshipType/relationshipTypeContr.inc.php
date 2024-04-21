@@ -42,6 +42,10 @@ function isRelationshipTypeNameUnique(object $pdo, string $relationship_type_nam
 	return true;
 }	
 
+function doesRelationshipTypeHaveInverse(object $pdo, int $relationship_type_id) {
+	return selectRelationshipInverseFromId($pdo, $relationship_type_id);
+}	
+
 function getRelationshipTypeFromId(object $pdo, int $relationship_type_id) {
 	return selectRelationshipTypeFromId($pdo, $relationship_type_id);
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 require_once "character/characterContr.inc.php";
+require_once "occupation/occupationContr.inc.php";
 
 if ($_SERVER["REQUEST_METHOD"] != "POST") {	
 	header("Location: /OPDatabase/pages/characterMain.php");
@@ -9,7 +10,12 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 $character_id = intval($_POST["character_id"]);
-$info_type = intval($_POST["info_type"]);
+$parse_results = [];
+parse_str($_POST["character_occupation"], $parse_results);
+
+$info_cache_reveal = intval($parse_results["info_cache_reveal"]);
+$occupation_type = intval($parse_results["occupation"]);
+$organization = intval($parse_results["organization"]);
 
 try {
 
@@ -28,19 +34,23 @@ try {
 	unset($_SESSION["modify_query_data"]);
 
 	if ($character_errors) {
-		$_SESSION["insert_character_errors"] = $character_errors;
+		$_SESSION["modify_character_errors"] = $character_errors;
 
 		header("Location: /OPDatabase/pages/characterMain.php");
 		die();
 	}
 
-	$result = getCharacterFromId($pdo, $character_id); 
+	$character_result = getCharacterFromId($pdo, $character_id);
+	$character_occupation = getOccupation($pdo, $occupation_type, $character_id, $organization, $info_cache_reveal);
 
 	$query_data = [
-		"info_cache_reveal" => $result["_info_cache_introdcued"],
-		"info_cache" => $result["_info_cache_introduced"],
-		"character_id" => $character_id, 
-		"info_type" => $info_type
+		"character_id" => $character_id,
+		"info_cache_reveal" => $info_cache_reveal,
+		"info_cache_invalid" => $character_occupation["_info_cache_invalid"],
+		"character_occupation" => $occupation_type,
+		"character_organization" => $organization,
+		"min_info_cache_id" => $character_result["_info_cache_introduced"],
+		"info_type" => 3
 	];
 	$_SESSION["modify_query_data"] = $query_data;
 

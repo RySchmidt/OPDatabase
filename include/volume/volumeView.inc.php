@@ -31,7 +31,8 @@ function volumeSelection(string $query_data, string $query_name) {
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if ($_SESSION[$query_data. "_query_date"][$query_name] == $result["number"]) {
+				if ($_SESSION[$query_data. "_query_data"][$query_name] == $result["number"]) {
+					echo "TESTING";
 					echo "<option value='" . htmlspecialchars((string)$result["number"]) . "' selected> " . htmlspecialchars((string)$result["number"]) . " - " . htmlspecialchars($result["title"]) . " </option>";	
 				}			
 				else {

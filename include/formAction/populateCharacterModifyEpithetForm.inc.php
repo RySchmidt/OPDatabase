@@ -9,7 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 $character_id = intval($_POST["character_id"]);
-$info_type = intval($_POST["info_type"]);
+$parse_results = [];
+parse_str($_POST["character_epithet"], $parse_results);
+
+$epithet = $parse_results["epithet"];
+$info_cache_reveal = $parse_results["info_cache_reveal"];
 
 try {
 
@@ -28,19 +32,20 @@ try {
 	unset($_SESSION["modify_query_data"]);
 
 	if ($character_errors) {
-		$_SESSION["insert_character_errors"] = $character_errors;
+		$_SESSION["modify_character_errors"] = $character_errors;
 
 		header("Location: /OPDatabase/pages/characterMain.php");
 		die();
 	}
 
-	$result = getCharacterFromId($pdo, $character_id); 
+	$result = getCharacterFromId($pdo, $character_id);
 
 	$query_data = [
-		"info_cache_reveal" => $result["_info_cache_introdcued"],
-		"info_cache" => $result["_info_cache_introduced"],
+		"info_cache_reveal" => $info_cache_reveal,
 		"character_id" => $character_id, 
-		"info_type" => $info_type
+		"character_epithet" => $epithet, 
+		"min_info_cache_id" => $result["_info_cache_introduced"],
+		"info_type" => 2
 	];
 	$_SESSION["modify_query_data"] = $query_data;
 
