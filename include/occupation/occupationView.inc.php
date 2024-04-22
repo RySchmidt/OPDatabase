@@ -32,7 +32,7 @@ function occupationSelection(string $query_data, string $query_name, string $cha
 
 		if(!empty($results)) {
 			foreach ($results as $result) {
-				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["occupation"]) {	
+				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["_occupation_type_id"]) {	
 					echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&occupation=" . htmlspecialchars((string)$result["_occupation_type_id"]) . "&organization=" . htmlspecialchars((string)$result["_organization_id"]) . "' selected> " . htmlspecialchars($result["organization_name"]) . " " . htmlspecialchars($result["occupation_name"]) . " </option>";	
 				}			
 				else {

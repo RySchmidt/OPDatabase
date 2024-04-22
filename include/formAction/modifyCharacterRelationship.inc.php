@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once $_SERVER["DOCUMENT_ROOT"] . '/OPDatabase/config.php';
 require_once "character/characterContr.inc.php";
-require_once "occupation/occupationContr.inc.php";
+require_once "relationship/relationshipContr.inc.php";
 
 if ($_SERVER["REQUEST_METHOD"] != "POST") {	
 	header("Location: /OPDatabase/pages/characterMain.php");
@@ -10,14 +10,17 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 $info_cache_id_reveal = intval($_POST["info_cache_id_reveal"]);
-$original_occupation = intval($_POST["original_occupation"]);
-$original_info_cache = intval($_POST["original_info_cache"]);
-$character_id = intval($_POST["character_id"]);
-$info_cache_reveal = intval($_POST["info_cache_reveal"]);
-$character_occupation = intval($_POST["character_occupation"]);
 
-$character_organization = intval($_POST["character_organization"]);
-$original_organization = intval($_POST["original_organization"]);
+$original_relationship = intval($_POST["original_relationship"]);
+$character_relationship = intval($_POST["character_relationship"]);
+
+$character_id = intval($_POST["character_id"]);
+
+$original_character_id_b = intval($_POST["original_character_id_b"]);
+$character_id_b = intval($_POST["character_id_b"]);
+
+$original_info_cache = intval($_POST["original_info_cache"]);
+$info_cache_reveal = intval($_POST["info_cache_reveal"]);
 
 $original_info_cache_invalid = intval($_POST["original_info_cache_invalid"]);
 $info_cache_invalid = intval($_POST["info_cache_invalid"]);
@@ -34,8 +37,8 @@ try {
 		$character_errors["no_selection"] = "Select a character to add information to";	
 	}
 	else {
-		if ($character_occupation <= 0
-			|| $character_organization <= 0
+		if ($character_relationship <= 0
+			|| $character_id_b <= 0
 			|| $info_cache_reveal <= 0) {	
 			$character_errors["empty_input"] = "Required field (Name, Introduced In) cannot be empty";	
 		}
@@ -53,9 +56,9 @@ try {
 		$queryData = [	
 			"info_cache_id_reveal" => $info_cache_id_reveal,
 			"min_info_cache_id" => $result["_info_cache_introduced"],
-			"info_type" => 3,
-			"character_occupation" => $original_occupation,
-			"character_organization" => $original_organization,
+			"info_type" => 4,
+			"character_relationship" => $original_relationship,
+			"character_id_b" => $original_id_b,
 			"character_id" => $character_id,
 			"info_cache_reveal" => $original_info_cache,
 			"info_cache_invalid" => $original_info_invalid
@@ -66,7 +69,7 @@ try {
 		die();
 	}
 
-	modifyOccupation($pdo, $original_occupation, $character_id, $original_organization, $original_info_cache, $character_occupation, $character_id, $character_organization, $info_cache_reveal, $info_cache_invalid);
+	modifyRelationship($pdo, $original_relationship, $character_id, $original_character_id_b, $original_info_cache, $character_relationship, $character_id, $character_id_b, $info_cache_reveal, $info_cache_invalid);
 
 	$pdo = null;
 	$stmt = null;

@@ -39,7 +39,7 @@ echo $original_info_cache_id . "<br>";
 function deleteName(object $pdo, string $name, int $character_id, int $info_cache_id) {
 	$query = "DELETE 
 		FROM _name
-		WHERE _name.name = :name, _name.character_id = :character_id, _name.info_cache_reveal:info_cache_id;";
+		WHERE _name.name = :name AND _name._character_id = :character_id AND _name._info_cache_reveal = :info_cache_id;";
 
 	$stmt = $pdo->prepare($query);
 	$stmt->bindParam(":name", $name);

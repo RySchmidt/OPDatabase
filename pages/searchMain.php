@@ -21,13 +21,6 @@ require_once "search/searchView.inc.php";
 
 <div class="formsRow">
 
-<div class="searchResults">
-<h1> Search Results </h1>
-<?php
-displayCharacterSearch("character_search_ids");
-?>
-</div>
-
 <div class="formsColumn">
 
 <?php
@@ -36,6 +29,11 @@ searchTable();
 
 </div>
 </div>
+
+<?php
+displayCharacterSearch("character_search_ids");
+?>
+
 
 </body>
 </html>

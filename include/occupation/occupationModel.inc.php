@@ -22,8 +22,12 @@ function insertOccupation(object $pdo, int $occupation_type_id, int $character_i
 
 function updateOccupation(object $pdo, int $original_occupation_type_id, int $original_character_id, int $original_organization_id, int $original_info_cache_reveal, int $occupation_type_id, int $character_id, int $organization_id, int $info_cache_reveal, int $info_cache_invalid) {
 
+	if ($info_cache_invalid <= 0) {
+		$info_cache_invalid = null;
+	}
+
 	$query = "UPDATE _occupation
-		SET _occupation._occupation_type_id = :occupation_type_id, _occupation._character_id = :character_id, _occupation._organization_id = :organization_id, _occupation._info_cache_reveal = :info_cache_reveal, _occupation._info_cache_invalid = :info_cache_invalid
+		SET _occupation._occupation_type_id = :occupation_type_id, _occupation._organization_id = :organization_id, _occupation._info_cache_reveal = :info_cache_reveal, _occupation._info_cache_invalid = :info_cache_invalid
 		WHERE _occupation._occupation_type_id = :original_occupation_type_id AND _occupation._character_id = :original_character_id AND _occupation._organization_id = :original_organization_id AND _occupation._info_cache_reveal = :original_info_cache_reveal;";
 
 	$stmt = $pdo->prepare($query);	
@@ -31,6 +35,11 @@ function updateOccupation(object $pdo, int $original_occupation_type_id, int $or
 	$stmt->bindParam(":original_character_id", $original_character_id);
 	$stmt->bindParam(":original_organization_id", $original_organization_id);
 	$stmt->bindParam(":original_info_cache_reveal", $original_info_cache_reveal);
+
+	$stmt->bindParam(":occupation_type_id", $occupation_type_id);
+	$stmt->bindParam(":organization_id", $organization_id);
+	$stmt->bindParam(":info_cache_reveal", $info_cache_reveal);
+	$stmt->bindParam(":info_cache_invalid", $info_cache_invalid);
 
 	$stmt->execute();
 }
@@ -40,6 +49,7 @@ function deleteOccupation($pdo, $occupation_type_id, $character_id, $organizatio
 		FROM _occupation
 		WHERE _occupation._occupation_type_id = :occupation_type_id AND _occupation._character_id = :character_id AND _occupation._organization_id = :organization_id AND _occupation._info_cache_reveal = :info_cache_reveal;";
 
+	$stmt = $pdo->prepare($query);	
 	$stmt->bindParam(":occupation_type_id", $occupation_type_id);
 	$stmt->bindParam(":character_id", $character_id);
 	$stmt->bindParam(":organization_id", $organization_id);

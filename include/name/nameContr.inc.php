@@ -12,7 +12,7 @@ function modifyName(object $pdo, string $original_name, string $name, int $chara
 }
 
 function removeName(object $pdo, string $name, int $character_id, int $info_cache_id) {
-	return deleteName($pdo, $name, $character_id, $info_cache_id);
+	deleteName($pdo, $name, $character_id, $info_cache_id);
 }
 
 function isNameUnique(object $pdo, string $name, int $character_id, int $info_cache_id) {

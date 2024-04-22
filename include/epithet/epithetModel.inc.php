@@ -32,7 +32,7 @@ function updateEpithet(object $pdo, string $original_epithet, string $epithet, i
 function deleteEpithet(object $pdo, string $epithet, int $character_id, int $info_cache_id) {
 	$query = "DELETE 
 		FROM _epithet
-		WHERE _epithet.epithet = :epithet, _epithet.character_id = :character_id, _epithet.info_cache_reveal:info_cache_id;";
+		WHERE _epithet.epithet = :epithet AND _epithet._character_id = :character_id AND _epithet._info_cache_reveal = :info_cache_id;";
 	
 	$stmt = $pdo->prepare($query);
 	$stmt->bindParam(":epithet", $epithet);

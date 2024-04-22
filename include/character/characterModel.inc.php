@@ -31,11 +31,11 @@ function updateCharacter(object $pdo, int $character_id, int $info_cache_id, str
 
 function deleteCharacter(object $pdo, int $character_id) {	
 	$query = "DELETE 
-		FROM _info_cache
-		WHERE _info_cache.id = :info_cache_id;";
+		FROM _character
+		WHERE _character.id = :character_id;";
 
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":info_cache_id", $info_cache_id);
+	$stmt->bindParam(":character_id", $character_id);
 
 	$stmt->execute();
 }

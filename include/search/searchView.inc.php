@@ -29,18 +29,39 @@ function searchTable() {
 
 function displayCharacterSearch($search_results_name) {
 
+	echo "<h1> Search Results </h1>";
+	echo "<link rel='stylesheet' href='/OPDatabase/css/displayTable.css'>";
+
 	$result_ids = $_SESSION[$search_results_name];
 	$max_chapter = $_SESSION["max_chapter_filter"];
 
 	if (!empty($result_ids)) { 
 
+			echo "<table class='display' id='SearchTable'>";
+
+			echo "<thead>";
+			echo "<tr>";
+			echo "<th class='display'> Character Name </th>";
+			echo "<th class='display'> Also Known As... </th>";
+			echo "<th class='display'> Epithets </th>";
+			echo "<th class='display'> Occupations </th>";
+			echo "<th class='display'> Relationships </th>";
+
+			echo "</tr>";
+			echo "</thead>";
+
+			echo "<tbody>";
+
 		try {
 			require_once("dbh.inc.php");
+
 
 			$result_ids = extractIds($result_ids);
 			$result_ids = sortIdsByName($pdo, $max_chapter, $result_ids);
 
 			foreach ($result_ids as $result) {	
+
+				echo "<tr>";
 
 				$names = getSortedCharacterNames($pdo, $result["id"], $max_chapter);
 
@@ -49,40 +70,41 @@ function displayCharacterSearch($search_results_name) {
 
 				if (!empty($names)) {
 					foreach ($names as $name) {
-						if ($other_names) {
-							$other_names = false;
-							echo "Also know as... <br>";
-						}
-
 						if ($first) {
 							$first = false;
-							$other_names = true;
-							echo "<h3>" . htmlspecialchars((string)$name["name"]) . "</h3> <p>";
+							echo "<td class='display'> <h3>" . htmlspecialchars((string)$name["name"]) . "</h3> </td>";
+							echo "<td class='display'>";
 						}
 						else {	
 							echo htmlspecialchars((string)$name["name"]) . "<br>";
 						}
 					}
+					echo "</td>";
 				}
-				else {
-					echo "<h3> UNKNOWN </h3>";
+				else {	
+					echo "<td class='display'> <h3> UNKNOWN </h3> </td>";
+					echo "<td class='display'> </td>";
 				}
 
 				$epithets = getSortedCharacterEpithets($pdo, $result["id"], $max_chapter);
 
 				$first = true;
 				if (!empty($epithets)){
-					echo "Epithets: ";
+					echo "<td class='display'>";
 					foreach ($epithets as $epithet) {
 						echo htmlspecialchars((string)$epithet["epithet"]) . "<br>";
 					}
+					echo "</td>";
+				}
+				else {
+					echo "<td class='display'> </td>";
 				}
 
 				$occupations = getSortedCharacterCurrentOccupations($pdo, $result["id"], $max_chapter);
 
+				echo "<td class='display'>";
 				$first = true;
 				if (!empty($occupations)){
-					echo "Occupations: <br>";
 					foreach ($occupations as $occupation) {
 							echo htmlspecialchars((string)$occupation["organization_name"]) . " " . htmlspecialchars((string)$occupation["occupation_name"]) . "<br>";
 					}
@@ -94,12 +116,13 @@ function displayCharacterSearch($search_results_name) {
 					foreach ($occupations as $occupation) {
 							echo "Former " . htmlspecialchars((string)$occupation["organization_name"]) . " " . htmlspecialchars((string)$occupation["occupation_name"]) . "<br>";
 					}
-				}
+				}	
+					echo "</td>";
 
 				$relationships = getSortedCharacterCurrentRelationships($pdo, $result["id"], $max_chapter);
 
+				echo "<td class='display'>";
 				if (!empty($relationships)){
-					echo "Relationship: <br> ";
 					foreach ($relationships as $relationship) {	
 							$names = getSortedCharacterNames($pdo, $relationship["_character_b"], $max_chapter);
 							if (!empty($names)) {
@@ -126,7 +149,7 @@ function displayCharacterSearch($search_results_name) {
 					}
 				}
 
-				echo "</p>";
+				echo "</td>";
 			}
 
 		} catch (PDOException $e) {

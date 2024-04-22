@@ -247,7 +247,7 @@ characterSelection("delete_information", "character_id");
 <td class="form"> <label name="character_id"> Select Character: </label> </td>
 <td class="form">
 <?php
-characterSelection("delete_information", "character_id");
+characterSelection("delete", "character_id");
 ?>
 </td>
 </tr>
@@ -274,7 +274,7 @@ characterSelection("delete_information", "character_id");
 <br>
 
 <?php
-informationModifyDisplay("delete");
+informationDeleteDisplay("delete");
 ?>
 
 </div>

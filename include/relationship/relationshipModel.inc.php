@@ -21,10 +21,13 @@ function insertRelationship(object $pdo, int $relationship_type_id, int $charact
 }
 
 function updateRelationship(object $pdo, int $original_relationship_type_id, int $original_character_a, int $original_character_b, int $original_info_cache_reveal, int $relationship_type_id, int $character_a, int $character_b, int $info_cache_reveal, int $info_cache_invalid) {
+	if ($info_cache_invalid <= 0) {
+		$info_cache_invalid = null;
+	}
 
 	$query = "UPDATE _relationship
 		SET _relationship._relationship_type_id = :relationship_type_id, _relationship._character_a = :character_a, _relationship._character_b = :character_b, _relationship._info_cache_reveal = :info_cache_reveal, _relationship._info_cache_invalid = :info_cache_invalid
-		WHERE _relationship._relationship_type_id = :original_relationship_type_id, _relationship._character_a = :original_character_a, _relationship._character_b = :original_character_b, _relationship._info_cache_reveal = :original_info_cache_reveal;";
+		WHERE _relationship._relationship_type_id = :original_relationship_type_id AND _relationship._character_a = :original_character_a AND _relationship._character_b = :original_character_b AND _relationship._info_cache_reveal = :original_info_cache_reveal;";
 
 	$stmt = $pdo->prepare($query);	
 	$stmt->bindParam(":original_relationship_type_id", $original_relationship_type_id);
@@ -44,8 +47,9 @@ function updateRelationship(object $pdo, int $original_relationship_type_id, int
 function deleteRelationship($pdo, $relationship_type_id, $character_a, $character_b, $info_cache_reveal) {
 	$query = "DELETE
 		FROM _relationship
-		WHERE _relationship._relationship_type_id = :relationship_type_id, _relationship._character_a = :character_a, _relationship._character_b = :character_b, _relationship._info_cache_reveal;";
+		WHERE _relationship._relationship_type_id = :relationship_type_id AND _relationship._character_a = :character_a AND _relationship._character_b = :character_b AND _relationship._info_cache_reveal = :info_cache_reveal;";
 
+	$stmt = $pdo->prepare($query);	
 	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
 	$stmt->bindParam(":character_a", $character_a);
 	$stmt->bindParam(":character_b", $character_b);
@@ -54,13 +58,13 @@ function deleteRelationship($pdo, $relationship_type_id, $character_a, $characte
 	$stmt->execute();
 }
 
-function selectRelationshipFromCharacterId(object $pdo, string $character_a) {
+function selectRelationshipFromCharacterId(object $pdo, int $character_a) {
 	$query = "SELECT *
 		FROM _relationship
 		WHERE _relationship._character_a = :character_a;";
 
 	$stmt = $pdo->prepare($query);
-	$stmt->bindParam(":character", $character);
+	$stmt->bindParam(":character_a", $character_a);
 
 	$stmt->execute();
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -70,7 +74,7 @@ function selectRelationshipFromCharacterId(object $pdo, string $character_a) {
 function selectRelationship(object $pdo, int $relationship_type_id, int $character_a, int $character_b, int $info_cache_reveal) {	
 	$query = "SELECT *
 		FROM _relationship
-		WHERE _relationship._relationship_type_id = :relationship_type_id, _relationship._character_a = :character_a, _relationship._character_b = :character_b, _relationship._info_cache_reveal = :info_cache_reveal;";
+		WHERE _relationship._relationship_type_id = :relationship_type_id AND _relationship._character_a = :character_a AND _relationship._character_b = :character_b AND _relationship._info_cache_reveal = :info_cache_reveal;";
 
 	$stmt = $pdo->prepare($query);	
 	$stmt->bindParam(":relationship_type_id", $relationship_type_id);
@@ -99,9 +103,9 @@ function selectAdvancedRelationshipFromCharacterId(object $pdo, int $character_i
 
 function updateViewAdvancedRelationship(object $pdo) {
 	$query = "CREATE OR REPLACE VIEW _advanced_relationship AS
-		SELECT T4.relationship_name, T4._character_a, T4.character_name_a, T4._character_b, T6.name AS character_name_b, T4._info_cache_reveal, T4._info_cache_invalid
-		FROM (SELECT T1.relationship_name, T1._character_a, T3.name AS character_name_a, T1._character_b, T1._info_cache_reveal, T1._info_cache_invalid
-		FROM (SELECT _relationship_type.name AS relationship_name, _relationship._character_a, _relationship._character_b, _relationship._info_cache_reveal, _relationship._info_cache_invalid
+		SELECT T4.relationship_name, T4._relationship_type_id, T4._character_a, T4.character_name_a, T4._character_b, T6.name AS character_name_b, T4._info_cache_reveal, T4._info_cache_invalid
+		FROM (SELECT T1.relationship_name, T1._relationship_type_id, T1._character_a, T3.name AS character_name_a, T1._character_b, T1._info_cache_reveal, T1._info_cache_invalid
+		FROM (SELECT _relationship_type.name AS relationship_name, _relationship._relationship_type_id, _relationship._character_a, _relationship._character_b, _relationship._info_cache_reveal, _relationship._info_cache_invalid
 		FROM _relationship 
 		INNER JOIN _relationship_type ON _relationship_type.id = _relationship._relationship_type_id) AS T1
 INNER JOIN(

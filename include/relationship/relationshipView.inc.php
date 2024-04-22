@@ -27,14 +27,15 @@ function relationshipSelection(string $query_data, string $query_name) {
 
 	try {
 		require "dbh.inc.php";
-		$results = getAllRelationshipFromCharacterId($pdo, $_SESSION[$query_data . "_query_data"]["character_id"]);
+
+		$results = getRelationshipDisplayFromCharacterId($pdo, $_SESSION[$query_data . "_query_data"]["character_id"]);
 		if(!empty($results)) {
 			foreach ($results as $result) {
 				if ($_SESSION[$query_data . "_query_data"][$query_name] == $result["id"]) {
-					echo "<option value='" . htmlspecialchars((string)$result["id"]) . "'selected>" . htmlspecialchars($result["name"]) . " </option>";	
+					echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&relationship_type=" . htmlspecialchars((string)$result["_relationship_type_id"]) . "&character_b=" . htmlspecialchars((string)$result["_character_b"]) . "' selected> " . htmlspecialchars($result["character_name_b"]) . "'s " . htmlspecialchars($result["relationship_name"]) . " </option>";	
 				}			
 				else {
-					echo "<option value='" . htmlspecialchars((string)$result["id"]) . "'> " . htmlspecialchars($result["name"]) . " </option>";
+					echo "<option value='info_cache_reveal=" . htmlspecialchars((string)$result["_info_cache_reveal"]) . "&relationship_type=" . htmlspecialchars((string)$result["_relationship_type_id"]) . "&character_b=" . htmlspecialchars((string)$result["_character_b"]) . "'> " . htmlspecialchars($result["character_name_b"]) . "'s " . htmlspecialchars($result["relationship_name"]) . " </option>";	
 				}
 			}
 		}

@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 }
 
 $character_id = intval($_POST["character_id"]);
+$info_cache_id_reveal = intval($_POST["info_cache_id_reveal"]);
 $parse_results = [];
 parse_str($_POST["character_occupation"], $parse_results);
 
@@ -29,6 +30,10 @@ try {
 		$character_errors["empty_input"] = "Select a character to modify the information of.";	
 	}
 
+	if (empty($occupation_type)) {
+		$character_errors["no_occupation"] = "Select a occupation to modify.";
+	}
+
 	require_once "configSession.inc.php";
 
 	unset($_SESSION["modify_query_data"]);
@@ -36,6 +41,13 @@ try {
 	if ($character_errors) {
 		$_SESSION["modify_character_errors"] = $character_errors;
 
+		$queryData = [
+			"info_cache_id_reveal" => $info_cache_id_reveal,
+			"character_id" => $character_id,
+			"info_type" => 3
+		];
+	
+		$_SESSION["modify_query_data"] = $queryData;
 		header("Location: /OPDatabase/pages/characterMain.php");
 		die();
 	}
@@ -44,6 +56,7 @@ try {
 	$character_occupation = getOccupation($pdo, $occupation_type, $character_id, $organization, $info_cache_reveal);
 
 	$query_data = [
+		"info_cache_id_reveal" => $info_cache_id_reveal,
 		"character_id" => $character_id,
 		"info_cache_reveal" => $info_cache_reveal,
 		"info_cache_invalid" => $character_occupation["_info_cache_invalid"],

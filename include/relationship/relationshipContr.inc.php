@@ -7,7 +7,7 @@ function addRelationship(object $pdo, int $relationship_type_id, int $character_
 }
 
 function modifyRelationship(object $pdo, int $original_relationship_type_id, int $original_character_id_a, int $original_character_id_b, int $original_info_cache_reveal, int $relationship_type_id, int $character_id, int $character_id_b, int $info_cache_reveal, int $info_cache_invalid) {
-	updateRelationship($pdo, $original_relationship_type_id, $original_character_id, $original_character_id_b, $original_info_cache_reveal, $relationship_type_id, $character_id_a, $character_id_b, $info_cache_reveal, $info_cache_invalid);
+	updateRelationship($pdo, $original_relationship_type_id, $original_character_id_a, $original_character_id_b, $original_info_cache_reveal, $relationship_type_id, $character_id, $character_id_b, $info_cache_reveal, $info_cache_invalid);
 }
 
 function removeRelationship(object $pdo, int $relationship_type_id, int $character_id_a, int $character_id_b, int $info_cache_reveal) {		
@@ -19,6 +19,10 @@ function isUniqueRelationship(object $pdo, int $relationship_type_id, int $chara
 		return true;
 	}
 	return false;	
+}
+
+function getRelationship(object $pdo, int $relationship_type_id, int $character_id_a, int $character_id_b, int $info_cache_reveal) {
+	selectRelationship($pdo, $relationship_type_id, $character_id_a, $character_id_b, $info_cache_reveal);
 }
 
 function getAllRelationship(object $pdo) {

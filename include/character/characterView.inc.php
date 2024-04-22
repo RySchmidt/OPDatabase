@@ -268,6 +268,7 @@ function informationModifyDisplay(string $query_data) {
 		echo "<form action='/OPDatabase/include/formAction/populateCharacterModifyNameForm.inc.php' method='POST'>";
 
 		hiddenCharacterField("modify", "character_id", "character_id");
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 
@@ -297,6 +298,7 @@ function informationModifyDisplay(string $query_data) {
 		echo "<form action='/OPDatabase/include/formAction/populateCharacterModifyEpithetForm.inc.php' method='POST'>";
 
 		hiddenCharacterField("modify", "character_id", "character_id");
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 
@@ -326,6 +328,7 @@ function informationModifyDisplay(string $query_data) {
 		echo "<form action='/OPDatabase/include/formAction/populateCharacterModifyOccupationForm.inc.php' method='POST'>";
 
 		hiddenCharacterField("modify", "character_id", "character_id");
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 
@@ -352,17 +355,18 @@ function informationModifyDisplay(string $query_data) {
 	case 4:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/populateCharacterModifyRelationshipForm.inc.php' method='POST'>";
 
 		hiddenCharacterField("modify", "character_id", "character_id");
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 
 		echo "<tr class='form'>";
-		echo "<td class='form'> <label name='character_id'> Select Relationship: </label> </td>";
+		echo "<td class='form'> <label name='character_relationship'> Select Relationship: </label> </td>";
 		echo "<td class='form'>";
 
-		//relationshipSelection("modify", "character_id");
+		relationshipSelection("modify", "character_relationship");
 
 		echo "</td>";
 		echo "</tr>";
@@ -391,6 +395,8 @@ function informationModify(string $query_data) {
 		hiddenCharacterField("modify", "character_name", "original_name");
 		hiddenCharacterField("modify", "info_cache_reveal", "original_info_cache");
 		hiddenCharacterField("modify", "character_id", "character_id");
+
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 		echo "<tr class='form'>";
@@ -433,6 +439,8 @@ function informationModify(string $query_data) {
 		hiddenCharacterField("modify", "info_cache_reveal", "original_info_cache");
 		hiddenCharacterField("modify", "character_id", "character_id");
 
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
+
 		echo "<tbody>";
 		echo "<tr class='form'>";
 		echo "<td class='form'> <label name='character_epithet'> Character Epithet: </label> </td>";
@@ -469,12 +477,15 @@ function informationModify(string $query_data) {
 	case 3:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/modifyCharacterOccupation.inc.php' method='POST'>";
 
 		hiddenCharacterField("modify", "character_occupation", "original_occupation");
 		hiddenCharacterField("modify", "character_organization", "original_organization");
 		hiddenCharacterField("modify", "info_cache_reveal", "original_info_cache");
+		hiddenCharacterField("modify", "info_cache_invalid", "original_info_cache_invalid");
 		hiddenCharacterField("modify", "character_id", "character_id");
+
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 		echo "<tr class='form'>";
@@ -530,9 +541,15 @@ function informationModify(string $query_data) {
 	case 4:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/modifyCharacterRelationship.inc.php' method='POST'>";
 
-		hiddenCharacterField("insert", "character_id", "character_id");
+		hiddenCharacterField("modify", "character_id_b", "original_character_id_b");
+		hiddenCharacterField("modify", "character_relationship", "original_relationship");
+		hiddenCharacterField("modify", "info_cache_reveal", "original_info_cache");
+		hiddenCharacterField("modify", "character_id", "character_id");
+		hiddenCharacterField("modify", "info_cache_invalid", "original_info_cache_invalid");
+
+		hiddenCharacterField("modify", "info_cache_id_reveal", "info_cache_id_reveal");
 
 		echo "<tbody>";
 
@@ -540,7 +557,7 @@ function informationModify(string $query_data) {
 		echo "<td class='form'> <label name='character_id_b'> Select Character: </label> </td>";
 		echo "<td class='form'>";
 
-		characterSelection("insert", "character_id_b");
+		characterSelection("modify", "character_id_b");
 
 		echo "</td>";
 		echo "</tr>";
@@ -549,7 +566,7 @@ function informationModify(string $query_data) {
 		echo "<td class='form'> <label name='character_relationship'> Relationship Type: </label> </td>";
 		echo "<td class='form'>";
 
-		relationshipTypeSelection("insert", "character_relationship");
+		relationshipTypeSelection("modify", "character_relationship");
 
 		echo "</td>";
 		echo "</tr>";
@@ -558,7 +575,7 @@ function informationModify(string $query_data) {
 		echo "<td class='form'> <label name='info_cache_reveal'> Relationship Revealed: </label> </td>";
 		echo "<td class='form'>";
 
-		infoCacheLimitedSelection('insert', 'info_cache_reveal', "min_info_cache_id");
+		infoCacheLimitedSelection('modify', 'info_cache_reveal', "min_info_cache_id");
 
 		echo "</td>";
 		echo "</tr>";
@@ -567,7 +584,7 @@ function informationModify(string $query_data) {
 		echo "<td class='form'> <label name='info_cache_invalid'> Relationship Broken: </label> </td>";
 		echo "<td class='form'>";
 
-		infoCacheLimitedSelection('insert', 'info_cache_invalid', "min_info_cache_id");
+		infoCacheLimitedSelection('modify', 'info_cache_invalid', "min_info_cache_id");
 
 		echo "</td>";
 		echo "</tr>";
@@ -594,9 +611,9 @@ function informationDeleteDisplay(string $query_data) {
 	case 1:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/deleteCharacterName.inc.php' method='POST'>";
 
-		hiddenCharacterField("insert", "character_id", "character_id");
+		hiddenCharacterField("delete", "character_id", "character_id");
 
 		echo "<tbody>";
 
@@ -604,7 +621,7 @@ function informationDeleteDisplay(string $query_data) {
 		echo "<td class='form'> <label name='character_id'> Select Name: </label> </td>";
 		echo "<td class='form'>";
 
-		nameSelection("modify", "character_name", "character_id");
+		nameSelection("delete", "character_name", "character_id");
 
 		echo "</td>";
 		echo "</tr>";
@@ -623,17 +640,17 @@ function informationDeleteDisplay(string $query_data) {
 	case 2:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/deleteCharacterEpithet.inc.php' method='POST'>";
 
-		hiddenCharacterField("insert", "character_id", "character_id");
+		hiddenCharacterField("delete", "character_id", "character_id");
 
 		echo "<tbody>";
 
 		echo "<tr class='form'>";
-		echo "<td class='form'> <label name='character_id'> Select Epithet: </label> </td>";
+		echo "<td class='form'> <label name='character_epithet'> Select Epithet: </label> </td>";
 		echo "<td class='form'>";
 
-		//epithetSelection("modify", "character_id");
+		epithetSelection("delete", "character_epithet", "character_id");
 
 		echo "</td>";
 		echo "</tr>";
@@ -652,17 +669,17 @@ function informationDeleteDisplay(string $query_data) {
 	case 3:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/deleteCharacterOccupation.inc.php' method='POST'>";
 
-		hiddenCharacterField("insert", "character_id", "character_id");
+		hiddenCharacterField("delete", "character_id", "character_id");
 
 		echo "<tbody>";
 
 		echo "<tr class='form'>";
-		echo "<td class='form'> <label name='character_id'> Select Occupation: </label> </td>";
+		echo "<td class='form'> <label name='character_occupation'> Select Occupation: </label> </td>";
 		echo "<td class='form'>";
 
-		//occupationSelection("modify", "character_id");
+		occupationSelection("delete", "character_occupation", "character_id");
 
 		echo "</td>";
 		echo "</tr>";
@@ -681,17 +698,17 @@ function informationDeleteDisplay(string $query_data) {
 	case 4:
 
 		echo "<table class='form'>";
-		echo "<form action='' method='POST'>";
+		echo "<form action='/OPDatabase/include/formAction/deleteCharacterRelationship.inc.php' method='POST'>";
 
-		hiddenCharacterField("insert", "character_id", "character_id");
+		hiddenCharacterField("delete", "character_id", "character_id");
 
 		echo "<tbody>";
 
 		echo "<tr class='form'>";
-		echo "<td class='form'> <label name='character_id'> Select Relationship: </label> </td>";
+		echo "<td class='form'> <label name='character_relationship'> Select Relationship: </label> </td>";
 		echo "<td class='form'>";
 
-		//relationshipSelection("modify", "character_id");
+		relationshipSelection("delete", "character_relationship");
 
 		echo "</td>";
 		echo "</tr>";

@@ -18,6 +18,9 @@ function insertRelationshipType(object $pdo, string $relationship_type_name, int
 }
 
 function updateRelationshipType(object $pdo, int $relationship_type_id, string $relationship_type_name, int $inverse_relationship_type_id) {
+	if ($inverse_relationship_type_id <= 0) {
+		$inverse_relationship_type_id = null;
+	}
 
 	$query = "UPDATE _relationship_type
 		SET _relationship_type.name = :relationship_type_name, _relationship_type._relationship_type_inverse = :inverse_relationship_type_id
