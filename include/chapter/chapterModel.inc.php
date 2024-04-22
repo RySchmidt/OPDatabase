@@ -160,7 +160,7 @@ function selectChapterInputDisplay(object $pdo) {
 	viewInfoCacheCoverStory($pdo);
 	viewAdvancedStoryArc($pdo);
 
-	$query = "SELECT T1.*, T2._cover_story_arc_id, T2._cover_story_arc_title, T2._cover_story_arc_parent, T2._cover_story_arc_parent_title
+	$query = "SELECT T1.*, T2.cover_story_title, T2._cover_story_arc_id, T2._cover_story_arc_title, T2._cover_story_arc_parent, T2._cover_story_arc_parent_title
 		FROM (SELECT _info_cache_chapter.*, _advanced_story_arc.story_arc_id, _advanced_story_arc.story_arc_title, _advanced_story_arc.parent_arc_id, _advanced_story_arc.parent_arc_title FROM _info_cache_chapter
 		LEFT JOIN _advanced_story_arc
 		ON _info_cache_chapter._chapter_story_arc_id = _advanced_story_arc.story_arc_id) AS T1

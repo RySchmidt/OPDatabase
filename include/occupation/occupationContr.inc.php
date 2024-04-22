@@ -22,7 +22,7 @@ function isUniqueOccupation(object $pdo, int $occupation_type_id, int $character
 }
 
 function getOccupation(object $pdo, int $occupation_type_id, int $character_id, int $organization_id, int $info_cache_reveal) {
-	selectOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal);
+	return selectOccupation($pdo, $occupation_type_id, $character_id, $organization_id, $info_cache_reveal);
 }
 
 function getAllOccupation(object $pdo) {

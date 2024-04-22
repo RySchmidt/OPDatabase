@@ -83,6 +83,8 @@ function selectRelationship(object $pdo, int $relationship_type_id, int $charact
 	$stmt->bindParam(":info_cache_reveal", $info_cache_reveal);
 
 	$stmt->execute();
+	$results = $stmt->fetch(PDO::FETCH_ASSOC);
+	return $results;
 }
 
 function selectAdvancedRelationshipFromCharacterId(object $pdo, int $character_id) {

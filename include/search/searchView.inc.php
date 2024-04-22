@@ -137,14 +137,13 @@ function displayCharacterSearch($search_results_name) {
 				$relationships = getSortedCharacterPreviousRelationships($pdo, $result["id"], $max_chapter);
 
 				if (!empty($relationships)){
-					echo "Relationship: <br> ";
 					foreach ($relationships as $relationship) {	
 							$names = getSortedCharacterNames($pdo, $relationship["_character_b"], $max_chapter);
 							if (!empty($names)) {
-								echo htmlspecialchars((string)$names[0]["name"]) . "'s former" . htmlspecialchars((string)$relationship["name"]) . "<br>";
+								echo htmlspecialchars((string)$names[0]["name"]) . "'s Former " . htmlspecialchars((string)$relationship["name"]) . "<br>";
 							}
 							else {
-								echo "UNKNOWN's former" . htmlspecialchars((string)$relationship["name"]) . "<br>";
+								echo "UNKNOWN's Former " . htmlspecialchars((string)$relationship["name"]) . "<br>";
 							}
 					}
 				}

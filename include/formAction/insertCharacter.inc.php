@@ -37,7 +37,7 @@ try {
 
 	unset($_SESSION["insert_query_data"]);
 
-	if ($character_error) {
+	if ($character_errors) {
 		$_SESSION["insert_character_errors"] = $character_errors;
 
 		$queryData = [

@@ -22,7 +22,7 @@ function isUniqueRelationship(object $pdo, int $relationship_type_id, int $chara
 }
 
 function getRelationship(object $pdo, int $relationship_type_id, int $character_id_a, int $character_id_b, int $info_cache_reveal) {
-	selectRelationship($pdo, $relationship_type_id, $character_id_a, $character_id_b, $info_cache_reveal);
+	return selectRelationship($pdo, $relationship_type_id, $character_id_a, $character_id_b, $info_cache_reveal);
 }
 
 function getAllRelationship(object $pdo) {

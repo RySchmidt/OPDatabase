@@ -53,6 +53,9 @@ function selectEpithet(object $pdo, string $epithet, int $character_id, int $inf
 	$stmt->bindParam(":character_id", $character_id);
 
 	$stmt->execute();
+
+	$results = $stmt->fetch(PDO::FETCH_ASSOC);
+	return $results;
 }
 
 function selectEpithetFromCharacterId(object $pdo, int $character_id) {	

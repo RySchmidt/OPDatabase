@@ -41,7 +41,7 @@ try {
 		$_SESSION["modify_character_errors"] = $character_errors;
 
 		$queryData = [
-			"info_cache_id_reveal" = $info_cache_id_reveal,
+			"info_cache_id_reveal" => $info_cache_id_reveal,
 			"character_id" => $character_id,
 			"info_type" => 2
 		];
@@ -55,7 +55,8 @@ try {
 	$result = getCharacterFromId($pdo, $character_id);
 
 	$query_data = [
-		"info_cache_id_reveal" = $info_cache_id_reveal,
+		"info_cache_id_reveal" => $info_cache_id_reveal,
+		"info_cache_reveal" => $info_cache_reveal,
 		"character_id" => $character_id, 
 		"character_epithet" => $epithet, 
 		"min_info_cache_id" => $result["_info_cache_introduced"],

@@ -453,6 +453,7 @@ function informationModify(string $query_data) {
 
 		echo "<tr class='form'>";
 		echo "<td class='form'> <label name='info_cache_reveal'> Introduced In: </label> </td>";
+
 		echo "<td class='form'>";
 
 		infoCacheLimitedSelection('modify', 'info_cache_reveal', "min_info_cache_id");

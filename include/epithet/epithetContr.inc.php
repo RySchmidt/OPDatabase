@@ -22,6 +22,10 @@ function isEpithetUnique(object $pdo, string $epithet, int $character_id, int $i
 	return false;
 }
 
+function getEpithet(object $pdo, string $epithet, int $character_id, int $info_cache_id) {
+	return (selectEpithet($pdo, $epithet, $character_id, $info_cache_id));
+}
+
 function getEpithetFromCharacterId(object $pdo, int $character_id) {
 	return selectEpithetFromCharacterId($pdo, $character_id);
 }

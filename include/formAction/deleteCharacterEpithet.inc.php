@@ -27,19 +27,19 @@ try {
 	$character_errors = [];
 
 	if ($character_id <= 0) {
-		$character_errors["empty_input"] = "Select a character to modify the information of.";	
+		$character_errors["empty_input"] = "Select a character to delete the information of.";	
 	}
 
 	if (empty($epithet)) {
-		$character_errors["no_epithet"] = "Select a epithet to modify.";
+		$character_errors["no_epithet"] = "Select a epithet to delete.";
 	}
 
 	require_once "configSession.inc.php";
 
-	unset($_SESSION["modify_query_data"]);
+	unset($_SESSION["delete_query_data"]);
 
 	if ($character_errors) {
-		$_SESSION["modify_character_errors"] = $character_errors;
+		$_SESSION["delete_character_errors"] = $character_errors;
 
 		$queryData = [
 			"info_cache_id_reveal" => $info_cache_id_reveal,
@@ -47,7 +47,7 @@ try {
 			"info_type" => 2
 		];
 	
-		$_SESSION["modify_query_data"] = $queryData;
+		$_SESSION["delete_query_data"] = $queryData;
 
 		header("Location: /OPDatabase/pages/characterMain.php");
 		die();
